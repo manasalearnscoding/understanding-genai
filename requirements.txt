@@ -4,5 +4,7 @@ jsonlines==4.0.0
 matplotlib==3.9.1
 sentencepiece==0.2.0
 accelerate==0.34.0
-black==24.8.0 # for code formatting
-isort==5.13.2 # for code formatting
+black==24.8.0  # for code formatting
+isort==5.13.2  # for code formatting
+transformers==4.40.0
+torch==2.2.2
