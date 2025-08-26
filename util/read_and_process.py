@@ -8,7 +8,14 @@ from scoring_and_patching_utils import (make_inputs, trace_with_patch, ModelAndT
 
 # For custom model implementations
 # from model.modeling_modified_olmo import ModifiedOLMoForCausalLM
-# from util import nethook
+import sys
+import os
+
+# memit_path = r'C:\Users\Vinod\memit'
+# if memit_path not in sys.path:
+#     sys.path.insert(0, memit_path)
+from util import nethook
+print(f"Loaded nethook from {nethook.__file__}")
 
 #########################################################################################################
 ####################################### PROCESS/STORE DATA ##############################################

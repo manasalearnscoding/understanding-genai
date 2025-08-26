@@ -6,6 +6,13 @@ import warnings
 from collections import defaultdict
 from transformers import AutoTokenizer, LlamaForCausalLM, LlamaTokenizer
 
+try:
+    from util import nethook
+    print(f"Loaded nethook from {nethook.__file__}")
+except ImportError:
+    print("Warning: nethook not found. Make sure MEMIT repository is in your PYTHONPATH.")
+    nethook = None
+
 warnings.filterwarnings("ignore")
 
 
@@ -17,6 +24,7 @@ def clean_entity_name(entity):
     stopwords = ['the', 'a', 'an', 'The', 'A', 'An']
     words = entity.split()
     cleaned_words = [word for word in words if word not in stopwords]
+    print(' '.join(cleaned_words))
     return ' '.join(cleaned_words)
 
 def format_winobias_as_mcqa(example):
@@ -26,6 +34,12 @@ def format_winobias_as_mcqa(example):
         return f"{sentence}. In this sentence, '{pronoun}' refers to"
     pro_prompt = create_prompt(example['pro_sentence'], example['pro_pronoun'])
     anti_prompt = create_prompt(example['anti_sentence'], example['anti_pronoun'])
+    # print("pro_prompt": pro_prompt,
+    #     "anti_prompt": anti_prompt,
+    #     "correct_entity": clean_correct,
+    #     "other_entity": clean_other,
+    #     "original_correct": example['correct_referent'],
+    #     "original_other": example['other_entity'])
     return {
         "pro_prompt": pro_prompt,
         "anti_prompt": anti_prompt,
@@ -94,10 +108,10 @@ def encode_winobias_mcqa(tokenizer, formatted_example, accuracy_only=False, retu
     for idx in range(len(answer_strings)):
         tokens = full_input_encodings_with_answers["input_ids"][idx][prompt_len:]
         answer_token_seqs.append(tokens.tolist())
-
+    print(f'Answer token seqs = {answer_token_seqs}')
     # By default, for MCQA-style use: just return first token of each sequence for legacy compatibility
     answer_encodings = [seq[0] if len(seq) > 0 else -1 for seq in answer_token_seqs]
-
+    
     # Structure: [pro_correct, pro_incorrect, anti_correct, anti_incorrect]
     if accuracy_only:
         return (
@@ -123,13 +137,12 @@ def score_winobias_target(
     mt,
     inp,
     answers_t,
-    answer_token_seqs=None,  # List[List[int]] or None; [pro_correct, pro_incorrect, ...]
-    counterfactual=False,
-    top_k=10
+    answer_token_seqs=None, 
+    counterfactual=False
 ):
     """
     Score entity referents for generative pronoun resolution.
-    If answer_token_seqs is given, score all tokens and collect top-k at each position.
+    If answer_token_seqs is given, score all tokens in the sequence.
     """
     with torch.inference_mode():
         outputs = mt.model(
@@ -139,50 +152,27 @@ def score_winobias_target(
     logits = outputs.logits  # [batch, seq_len, vocab]
     probs = torch.nn.functional.softmax(logits, dim=-1)
 
-    # --- Per-token scoring and top-k collection ---
-    topk_info = []
+    # --- Per-token log-probability collection ---
     logprob_info = []
-    all_ranks = []
     num_batches = logits.shape[0]
     if answer_token_seqs is not None:
         for b_idx in range(num_batches):
-            cur_topk = []
             cur_logprob = []
-            cur_rank = []
             context_len = inp["input_ids"][b_idx].shape[0]
             # For each answer in this batch, score full sequence
             tokens = answer_token_seqs[b_idx] if b_idx < len(answer_token_seqs) else []
-            input_ids = inp["input_ids"][b_idx]
             # Each answer token is scored at successive positions (as if generating one token at a time)
             for t_idx, tok in enumerate(tokens):
                 pos = context_len + t_idx
                 if pos >= logits.shape[1]:
                     break
-                logit_row = logits[b_idx, pos, :]
                 prob_row = probs[b_idx, pos, :]
-                # Top-k for this token position
-                topk = torch.topk(prob_row, top_k)
-                cur_topk.append([
-                    (token_id.item(), mt.tokenizer.decode([token_id.item()]), prob.item())
-                    for token_id, prob in zip(topk.indices, topk.values)
-                ])
                 # Log-prob for gold token
                 logprob = torch.log(prob_row[tok] + 1e-12)
                 cur_logprob.append(logprob.item())
-                # Rank of gold token
-                sorted_indices = torch.argsort(logit_row, descending=True)
-                rank = (sorted_indices == tok).nonzero(as_tuple=True)[0].item() + 1  # 1-based
-                cur_rank.append(rank)
-            topk_info.append(cur_topk)
             logprob_info.append(cur_logprob)
-            all_ranks.append(cur_rank)
-    else:
-        # fallback: single token
-        topk_info = []
-        logprob_info = []
-        all_ranks = []
 
-    # --- Compatibility: for the original metrics, only use the first token --
+    # --- Binary comparison: correct vs incorrect entity probabilities ---
     correct_entity_token = answers_t[0]
     incorrect_entity_token = answers_t[1]
     last_token_logits = logits[:, -1, :]
@@ -215,12 +205,12 @@ def score_winobias_target(
             contrast_corr_logit,
             contrast_incorr_logit,
         )
-        return (base_probs, base_logs, logprob_info, topk_info, all_ranks), (counterfactual_probs, counterfactual_logs, logprob_info, topk_info, all_ranks)
-    return base_probs, base_logs, logprob_info, topk_info, all_ranks
+        return (base_probs, base_logs, logprob_info), (counterfactual_probs, counterfactual_logs, logprob_info)
+    return base_probs, base_logs, logprob_info
 
 def compute_winobias_accuracy(mt, example):
     """
-    Compute model accuracy and full answer log-probs/top-k for a generative WinoBias/coref example.
+    Compute model accuracy and per-token log-probs for a generative WinoBias/coref example.
     """
     formatted_example = format_winobias_as_mcqa(example)
     (
@@ -236,13 +226,12 @@ def compute_winobias_accuracy(mt, example):
         accuracy_only=True,
         return_token_seqs=True
     )
-    base_probs, base_logs, logprob_info, topk_info, all_ranks = score_winobias_target(
+    base_probs, base_logs, logprob_info = score_winobias_target(
         mt,
         inp,
         answers_t,
         answer_token_seqs=answer_token_seqs,
-        counterfactual=False,
-        top_k=10
+        counterfactual=False
     )
     correct_prediction = base_probs[0] > 0
     return {
@@ -253,9 +242,7 @@ def compute_winobias_accuracy(mt, example):
         'prob_diff': base_probs[0],
         'correct_prob': base_probs[1],
         'incorrect_prob': base_probs[2],
-        'logprob_per_token': logprob_info,
-        'topk_per_token': topk_info,
-        'rank_per_token': all_ranks
+        'logprob_per_token': logprob_info
     }
 
 def trace_winobias_mcqa_style(
@@ -290,8 +277,7 @@ def trace_winobias_mcqa_style(
             inp,
             answers_t,
             answer_token_seqs=answer_token_seqs,
-            counterfactual=True,
-            top_k=10
+            counterfactual=True
         )
         base_prob_diff = base_inst[0][0]
         counterfact_prob_diff = counterfact_instance[0][0]
@@ -300,7 +286,7 @@ def trace_winobias_mcqa_style(
         both_correct = pro_correct and anti_correct
         if not both_correct and not include_negatives:
             return dict(correct_prediction=False)
-        prob_corr, prob_incorr, other_token_probs, top_k_tokens = trace_with_patch(
+        prob_corr, prob_incorr, other_token_probs = trace_with_patch(
             mt=mt,
             inp=inp,
             answers_t=answers_t,
@@ -312,7 +298,6 @@ def trace_winobias_mcqa_style(
             probits_correct=prob_corr,
             probits_incorrect=prob_incorr,
             other_token_probs=other_token_probs,
-            top_k_tokens=top_k_tokens,
             base_probs_logs=base_inst,
             contrast_probs_logs=counterfact_instance,
             input_ids_base_inst=inp["input_ids"][0].tolist(),
@@ -375,7 +360,7 @@ def trace_with_patch(
             h[0, t] = h[1, t]
         return x
 
-    probs_table_corr, probs_table_incorr, top_k_tokens = [], [], []
+    probs_table_corr, probs_table_incorr = [], []
     other_token_probs = defaultdict(list)
     for layer in range(mt.num_layers):
         lname = layername(mt, layer, kind)
@@ -389,20 +374,16 @@ def trace_with_patch(
             list(patch_spec.keys()),
             edit_output=patch_rep_seqScoring,
         ):
-            # Note: To get per-token info for each patch, pass in token seqs
-            p, l, logprob_info, topk_info, all_ranks = score_winobias_target(
+            p, l, logprob_info = score_winobias_target(
                 mt,
                 inp,
                 answers_t,
-                # TODO: If you want per-token info at each patch, pass token_seqs
                 answer_token_seqs=None,
                 counterfactual=False,
-                top_k=10,
             )
         probs_table_corr.append(p[1])
         probs_table_incorr.append(p[2])
-        top_k_tokens.append(topk_info)
-    return probs_table_corr, probs_table_incorr, other_token_probs, top_k_tokens
+    return probs_table_corr, probs_table_incorr, other_token_probs
 
 def layername(mt, num, kind):
     model = mt.model
@@ -438,7 +419,8 @@ class ModelAndTokenizer:
     ):
         if tokenizer is None:
             assert model_name is not None
-            tokenizer = AutoTokenizer.from_pretrained(model_name)
+            # tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+            tokenizer = LlamaTokenizer.from_pretrained(model_name)
         if no_model_load:
             model = None
         elif model is None:
