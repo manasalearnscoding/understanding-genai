@@ -4,7 +4,15 @@ import jsonlines
 import torch
 import warnings
 from collections import defaultdict
+import os
+os.environ['HF_HOME'] = '/fs/clip-scratch/mvinodku/'
+# import accelerate
+# import bitsandbytes as bnb
 from transformers import AutoTokenizer, LlamaForCausalLM, LlamaTokenizer
+
+# bnb_config = BitsAndBytesConfig(
+#     load_in_8bit=True
+# )
 
 try:
     from util import nethook
@@ -52,15 +60,17 @@ def format_winobias_as_mcqa(example):
 def make_inputs(
     tokenizer,
     prompts,
-    device="cuda" if torch.cuda.is_available() else "cpu",
+    device="cuda" if torch.cuda.is_available() else "cpu", #QUESTION : is this okay or will it crash the cpu device?
     add_special_tokens=True,
-    truncate=False,
+    truncate=False, # better way to pad?
 ):
     token_lists = [tokenizer.encode(p, add_special_tokens=add_special_tokens) for p in prompts]
+    # print(prompts)
+    # print(token_lists)
     input_ids = token_lists
     try:
         r1 = torch.tensor(input_ids)
-    except:
+    except: #QUESTION : haven't had a chance to run this yet but is this a crude way of making them same length, how can i pad?
         if truncate:
             min_len = min([len(t) for t in input_ids])
             truncated_input_ids = [t[:min_len] for t in input_ids]
@@ -85,13 +95,14 @@ def encode_winobias_mcqa(tokenizer, formatted_example, accuracy_only=False, retu
     correct_entity = formatted_example['correct_entity']
     other_entity = formatted_example['other_entity']
 
+    #encode the prompts: base prompt length = 26 tokens
     if accuracy_only:
         full_input_strings = [pro_prompt]
     else:
         full_input_strings = [pro_prompt, anti_prompt]
     inp = make_inputs(tokenizer, full_input_strings)
 
-    # -- MULTI-TOKEN: get entity token sequences --
+    #encode the answers with the correct entities
     answer_strings = [
         pro_prompt + " " + correct_entity,
         pro_prompt + " " + other_entity,
@@ -102,17 +113,19 @@ def encode_winobias_mcqa(tokenizer, formatted_example, accuracy_only=False, retu
             anti_prompt + " " + other_entity,
         ]
     full_input_encodings_with_answers = make_inputs(tokenizer, answer_strings)
-    # For each answer, get token id sequence *after* the prompt
+
+    #Extracts answer tokens by slicing off the prompt portion from complete strings
     prompt_len = inp["input_ids"].shape[1]
     answer_token_seqs = []
+    #for answers with multiple tokens like 'software engineer'
     for idx in range(len(answer_strings)):
-        tokens = full_input_encodings_with_answers["input_ids"][idx][prompt_len:]
+        tokens = full_input_encodings_with_answers["input_ids"][idx][prompt_len:] 
         answer_token_seqs.append(tokens.tolist())
-    print(f'Answer token seqs = {answer_token_seqs}')
-    # By default, for MCQA-style use: just return first token of each sequence for legacy compatibility
+    # print(f'Answer token seqs = {answer_token_seqs}')
+    # w/o multi token tokenizing: return first token of each sequence for legacy compatibility
     answer_encodings = [seq[0] if len(seq) > 0 else -1 for seq in answer_token_seqs]
+    # print(f'Answer encodings = {answer_encodings}')
     
-    # Structure: [pro_correct, pro_incorrect, anti_correct, anti_incorrect]
     if accuracy_only:
         return (
             inp,
@@ -416,16 +429,23 @@ class ModelAndTokenizer:
         tokenizer=None,
         no_model_load=False,
         llama_path=None,
+        device_map="auto",        
+        low_cpu_mem_usage=True      
     ):
         if tokenizer is None:
             assert model_name is not None
             # tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
-            tokenizer = LlamaTokenizer.from_pretrained(model_name)
+            tokenizer = LlamaTokenizer.from_pretrained(model_name, use_auth_token="***")
         if no_model_load:
             model = None
         elif model is None:
             assert model_name is not None
-            model = LlamaForCausalLM.from_pretrained(model_name, device_map="auto")
+            model = LlamaForCausalLM.from_pretrained(
+                model_name, 
+                device_map="auto", 
+                # quantization_config=bnb_config,
+                low_cpu_mem_usage=True,
+                use_auth_token="***")
             model.eval()
         if not no_model_load:
             self.model = model

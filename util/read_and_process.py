@@ -3,6 +3,8 @@ import os
 import re
 import torch
 import jsonlines
+import os
+os.environ['HF_HOME'] = '/fs/clip-scratch/mvinodku/'
 from transformers import AutoTokenizer, LlamaForCausalLM, LlamaTokenizer
 from scoring_and_patching_utils import (make_inputs, trace_with_patch, ModelAndTokenizer)
 
@@ -94,7 +96,7 @@ def read_winocoref_file(pro_file="../data/pro_stereotyped_type1.txt.dev",
     # print(examples)
     return examples
 
-
+'''only present in this file'''
 def extract_brackets_info(sentence):
     """
     Extract entity and pronoun information from a bracketed sentence.
@@ -131,7 +133,7 @@ def extract_brackets_info(sentence):
     else:
         raise ValueError(f"Expected at least 2 bracketed sections, found {len(brackets)}")
 
-
+'''only present in this file'''
 def find_other_entity(pro_lines, anti_lines, current_index, current_entity):
     """
     Find the other entity by looking at the paired line where the other entity is bracketed.
