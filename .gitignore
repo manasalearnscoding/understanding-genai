@@ -4,3 +4,7 @@ temp_results/
 .ipynb_checkpoints/
 *.log
 .env
+*.jsonl
+paired_*.jsonl
+vocab_proj_*.jsonl
+winobias_*.jsonl
