@@ -108,23 +108,16 @@ def make_inputs(
     add_special_tokens=True,
     truncate=False, # better way to pad?
 ):
-    token_lists = [tokenizer.encode(p, add_special_tokens=add_special_tokens) for p in prompts]
-    # print(prompts)
-    # print(token_lists)
-    input_ids = token_lists
-    try:
-        r1 = torch.tensor(input_ids)
-    except: #QUESTION : haven't had a chance to run this yet but is this a crude way of making them same length, how can i pad?
-        if truncate:
-            min_len = min([len(t) for t in input_ids])
-            truncated_input_ids = [t[:min_len] for t in input_ids]
-            try:
-                r1 = torch.tensor(truncated_input_ids)
-            except:
-                breakpoint()
-        else:
-            raise Exception("input_ids are not the same length; must specify padding")
-    return dict(input_ids=r1.to(device))
+    if tokenizer.pad_token is None and tokenizer.eos_token is not None:
+        tokenizer.pad_token = tokenizer.eos_token
+    batch = tokenizer(
+        prompts,
+        add_special_tokens=add_special_tokens,
+        padding=True,
+        truncation=truncate,
+        return_tensors="pt",
+    )
+    return dict(input_ids=batch["input_ids"].to(device))
 
 #########################################################################################################
 ######################################## ENCODING/SCORING ###############################################
@@ -139,7 +132,7 @@ def encode_winobias_mcqa(tokenizer, formatted_example, accuracy_only=False, retu
     correct_entity = formatted_example['correct_entity']
     other_entity = formatted_example['other_entity']
 
-    #encode the prompts: base prompt length = 26 tokens
+    #encode the prompts
     if accuracy_only:
         full_input_strings = [pro_prompt]
     else:
@@ -160,15 +153,15 @@ def encode_winobias_mcqa(tokenizer, formatted_example, accuracy_only=False, retu
 
     #Extracts answer tokens by slicing off the prompt portion from complete strings
     prompt_len = inp["input_ids"].shape[1]
-    answer_token_seqs = []
-    #for answers with multiple tokens like 'software engineer'
+
+    # SINGLE-TOKEN SCORING ONLY: Extract only first token of each answer
+    flat_answer_token_seqs = []
     for idx in range(len(answer_strings)):
-        tokens = full_input_encodings_with_answers["input_ids"][idx][prompt_len:] 
-        answer_token_seqs.append(tokens.tolist())
-    # print(f'Answer token seqs = {answer_token_seqs}')
-    # w/o multi token tokenizing: return first token of each sequence for legacy compatibility
-    answer_encodings = [seq[0] if len(seq) > 0 else -1 for seq in answer_token_seqs]
-    # print(f'Answer encodings = {answer_encodings}')
+        tokens = full_input_encodings_with_answers["input_ids"][idx][prompt_len:]
+        flat_answer_token_seqs.append(tokens.tolist())
+    answer_encodings = [seq[0] if len(seq) > 0 else -1 for seq in flat_answer_token_seqs]
+
+    grouped_answer_token_seqs = None  # Always return None for single-token scoring
     
     if accuracy_only:
         return (
@@ -177,7 +170,7 @@ def encode_winobias_mcqa(tokenizer, formatted_example, accuracy_only=False, retu
             pro_prompt,
             correct_entity,
             other_entity,
-            answer_token_seqs[:2] if return_token_seqs else None
+            None  # Single-token scoring only - always return None
         )
     else:
         return (
@@ -187,7 +180,7 @@ def encode_winobias_mcqa(tokenizer, formatted_example, accuracy_only=False, retu
             anti_prompt,
             correct_entity,
             other_entity,
-            answer_token_seqs if return_token_seqs else None
+            None  # Single-token scoring only - always return None
         )
 
 def score_winobias_target(
@@ -209,61 +202,51 @@ def score_winobias_target(
     logits = outputs.logits  # Raw model predictions [batch, seq_len, vocab_size]
     probs = torch.nn.functional.softmax(logits, dim=-1)  # Convert to probabilities
 
-    # --- Per-token log-probability collection ---
-    logprob_info = []  # Store detailed scoring info for each token
-    num_batches = logits.shape[0]  # Number of input prompts in batch
-    #QUESTION : for each token, we are scoring the tokens individually right now, is there a better way to score multiple tokens
-    if answer_token_seqs is not None:  # Only if multi-token scoring requested
-        for b_idx in range(num_batches):  # For each prompt in the batch
-            cur_logprob = []  # Log probabilities for this prompt's answer tokens
-            context_len = inp["input_ids"][b_idx].shape[0] #token length of input prompt - 26
-            # For each answer in this batch, score full multi tok answer sequence
-            tokens = answer_token_seqs[b_idx] if b_idx < len(answer_token_seqs) else []  # Get answer tokens for this prompt
-            # Each answer token is scored at successive positions (as if generating one token at a time)
-            for t_idx, tok in enumerate(tokens):  # For each token in the answer sequence
-                pos = context_len + t_idx  # Position where this token should appear
-                if pos >= logits.shape[1]:  # Skip if position exceeds sequence length
-                    break
-                prob_row = probs[b_idx, pos, :]  # Model's probability distribution at this position
-                # Log-prob for gold token
-                logprob = torch.log(prob_row[tok] + 1e-12)  # Log probability of the correct token (add epsilon to avoid log(0))
-                cur_logprob.append(logprob.item())  # Convert to Python float and store
-            logprob_info.append(cur_logprob)  # Add this prompt's token scores to overall list
+    logprob_info = []  # Single-token scoring only - no per-token logprob info
 
-    # --- Binary comparison: correct vs incorrect entity probabilities ---
-    correct_entity_token = answers_t[0]  # Token ID for correct answer (e.g., 13897 = "developer")
-    incorrect_entity_token = answers_t[1]  # Token ID for incorrect answer (e.g., 23383 = "designer")
+    # SINGLE-TOKEN SCORING ONLY
+    correct_entity_token = answers_t[0]  # Token ID for correct answer
+    incorrect_entity_token = answers_t[1]  # Token ID for incorrect answer
     last_token_logits = logits[:, -1, :]  # Model predictions at the final position (after "refers to")
     last_token_probs = probs[:, -1, :]  # Probabilities at the final position
-    base_corr_prob = last_token_probs[0, correct_entity_token].item()  # Probability of correct entity for first prompt
-    base_incorr_prob = last_token_probs[0, incorrect_entity_token].item()  # Probability of incorrect entity for first prompt
-    base_corr_logit = last_token_logits[0, correct_entity_token].item()  # Raw logit for correct entity
-    base_incorr_logit = last_token_logits[0, incorrect_entity_token].item()  # Raw logit for incorrect entity
-    base_probs = (base_corr_prob - base_incorr_prob, base_corr_prob, base_incorr_prob)  # (difference, correct, incorrect)
-    base_logs = (base_corr_logit - base_incorr_logit, base_corr_logit, base_incorr_logit)  # Same for logits
+    base_corr_prob = last_token_probs[0, correct_entity_token].item()
+    base_incorr_prob = last_token_probs[0, incorrect_entity_token].item()
+    base_corr_logit = last_token_logits[0, correct_entity_token].item()
+    base_incorr_logit = last_token_logits[0, incorrect_entity_token].item()
+    base_probs = (
+        base_corr_prob - base_incorr_prob,
+        base_corr_prob,
+        base_incorr_prob,
+    )
+    base_logs = (
+        base_corr_logit - base_incorr_logit,
+        base_corr_logit,
+        base_incorr_logit,
+    )
 
-    if counterfactual and last_token_logits.shape[0] > 1:  # If comparing two prompts (e.g., "he" vs "she")
+    if counterfactual and logits.shape[0] > 1:  # If comparing two prompts (e.g., "he" vs "she")
+        # SINGLE-TOKEN SCORING ONLY
         if len(answers_t) >= 4:  # If we have separate tokens for the second prompt
             contrast_corr_token = answers_t[2]  # Correct token for second prompt
             contrast_incorr_token = answers_t[3]  # Incorrect token for second prompt
         else:  # Otherwise use same tokens as first prompt
-            contrast_corr_token = correct_entity_token
-            contrast_incorr_token = incorrect_entity_token
-        contrast_corr_prob = last_token_probs[1, contrast_corr_token].item()  # Prob of correct entity for second prompt
-        contrast_incorr_prob = last_token_probs[1, contrast_incorr_token].item()  # Prob of incorrect entity for second prompt
-        contrast_corr_logit = last_token_logits[1, contrast_corr_token].item()  # Raw logit for correct entity (second prompt)
-        contrast_incorr_logit = last_token_logits[1, contrast_incorr_token].item()  # Raw logit for incorrect entity (second prompt)
-        counterfactual_probs = (  # Same format as base_probs but for second prompt
-            contrast_corr_prob - contrast_incorr_prob,  # Difference between correct and incorrect
-            contrast_corr_prob,  # Probability of correct entity
-            contrast_incorr_prob,  # Probability of incorrect entity
+            contrast_corr_token = answers_t[0]
+            contrast_incorr_token = answers_t[1]
+        contrast_corr_prob = last_token_probs[1, contrast_corr_token].item()
+        contrast_incorr_prob = last_token_probs[1, contrast_incorr_token].item()
+        contrast_corr_logit = last_token_logits[1, contrast_corr_token].item()
+        contrast_incorr_logit = last_token_logits[1, contrast_incorr_token].item()
+        counterfactual_probs = (
+            contrast_corr_prob - contrast_incorr_prob,
+            contrast_corr_prob,
+            contrast_incorr_prob,
         )
-        counterfactual_logs = (  # Same format as base_logs but for second prompt
-            contrast_corr_logit - contrast_incorr_logit,  # Difference in logits
-            contrast_corr_logit,  # Logit for correct entity
-            contrast_incorr_logit,  # Logit for incorrect entity
+        counterfactual_logs = (
+            contrast_corr_logit - contrast_incorr_logit,
+            contrast_corr_logit,
+            contrast_incorr_logit,
         )
-        return (base_probs, base_logs, logprob_info), (counterfactual_probs, counterfactual_logs, logprob_info)  # Return both base and counterfactual results
+        return (base_probs, base_logs, logprob_info), (counterfactual_probs, counterfactual_logs, logprob_info)
     return base_probs, base_logs, logprob_info  # Return only base results if no counterfactual comparison
 
 def compute_winobias_accuracy(mt, example):  # Model+tokenizer, WinoBias example dict
@@ -282,13 +265,13 @@ def compute_winobias_accuracy(mt, example):  # Model+tokenizer, WinoBias example
         mt.tokenizer,  # Tokenizer to use
         formatted_example,  # Formatted example dict
         accuracy_only=True,  # Only process stereotyped prompt, not anti-stereotyped
-        return_token_seqs=True  # Return full token sequences for multi-token support
+        return_token_seqs=False  # Single-token scoring only
     )
     base_probs, base_logs, logprob_info = score_winobias_target(  # Get model's predictions
         mt,  # Model and tokenizer
         inp,  # Tokenized inputs
         answers_t,  # Answer token IDs to score
-        answer_token_seqs=answer_token_seqs,  # Full sequences for detailed scoring
+        answer_token_seqs=None,  # Single-token scoring only
         counterfactual=False  # Don't compare with anti-stereotyped prompt
     )
     correct_prediction = base_probs[0] > 0  # True if correct entity has higher probability than incorrect
@@ -347,14 +330,14 @@ def trace_winobias_mcqa_style(
             mt.tokenizer,
             formatted_example,
             accuracy_only=False,
-            return_token_seqs=True
+            return_token_seqs=False  # Single-token scoring only
         )
         # Get initial predictions
         base_inst, counterfact_instance = score_winobias_target(
             mt,
             inp,
             answers_t,
-            answer_token_seqs=answer_token_seqs,
+            answer_token_seqs=None,  # Single-token scoring only
             counterfactual=True
         )
         base_prob_diff = base_inst[0][0]
@@ -382,8 +365,14 @@ def trace_winobias_mcqa_style(
             input_ids_counterfact_inst=inp["input_ids"][1].tolist(),
             input_tokens_base_inst=mt.tokenizer.decode(inp["input_ids"][0]),
             input_tokens_counterfact_inst=mt.tokenizer.decode(inp["input_ids"][1]),
-            base_answer_tokens=(mt.tokenizer.decode([t for t in answer_token_seqs[0]]),
-                                mt.tokenizer.decode([t for t in answer_token_seqs[1]])),
+            # SINGLE-TOKEN SCORING: Decode first token of each answer
+            # MULTI-TOKEN SCORING COMMENTED OUT:
+            # base_answer_tokens=(mt.tokenizer.decode(answer_token_seqs[0]["correct"]) if answer_token_seqs else "",
+            #                     mt.tokenizer.decode(answer_token_seqs[0]["incorrect"]) if answer_token_seqs else ""),
+            base_answer_tokens=(
+                mt.tokenizer.decode([answers_t[0]]) if len(answers_t) > 0 else "",  # correct token
+                mt.tokenizer.decode([answers_t[1]]) if len(answers_t) > 1 else "",  # incorrect token
+            ),
             prediction_type="both_correct" if both_correct else "mixed",
             kind=kind,
             formatted_prompts={
@@ -414,63 +403,168 @@ def trace_winobias_mcqa_style(
             'jailbreak_prompt_key': jailbreak_prompt_key if model_variant == "jailbreak" else None
         }
 
-def compare_model_variants(mt, example, variants=["baseline", "safety", "jailbreak"], 
-                          safety_prompt_key="fair", jailbreak_prompt_key="roleplay"):
+def find_pronoun_positions(tokenizer, input_ids):
     """
-    Compare bias patterns across different model variants.
+    Find positions of pronouns (he/she) in tokenized input.
+    Returns list of positions where pronouns occur.
+    """
+    # Common pronoun tokens for Llama tokenizer
+    he_tokens = tokenizer.encode(" he", add_special_tokens=False)
+    she_tokens = tokenizer.encode(" she", add_special_tokens=False)
     
-    Args:
-        mt: ModelAndTokenizer instance
-        example: WinoBias example dict
-        variants: List of model variants to compare
-        safety_prompt_key: Which safety prompt to use
-        jailbreak_prompt_key: Which jailbreak prompt to use
+    pronoun_positions = []
+    
+    # Search for pronoun tokens in the input
+    for batch_idx in range(input_ids.shape[0]):
+        tokens = input_ids[batch_idx].tolist()
         
-    Returns:
-        dict: Results for each variant with comparison metrics
-    """
-    results = {}
+        # Look for "he" tokens
+        for he_token in he_tokens:
+            for i, token in enumerate(tokens):
+                if token == he_token:
+                    pronoun_positions.append(i)
+        
+        # Look for "she" tokens  
+        for she_token in she_tokens:
+            for i, token in enumerate(tokens):
+                if token == she_token:
+                    pronoun_positions.append(i)
     
-    for variant in variants:
-        print(f"Running variant: {variant}")
-        result = trace_winobias_mcqa_style(
-            mt, example, 
-            model_variant=variant,
-            safety_prompt_key=safety_prompt_key,
-            jailbreak_prompt_key=jailbreak_prompt_key
+    # Remove duplicates and sort
+    pronoun_positions = sorted(list(set(pronoun_positions)))
+    return pronoun_positions if pronoun_positions else [input_ids.shape[1] - 1]  # fallback to final token
+
+def trace_with_patch(
+    mt,
+    inp,
+    answers_t,
+    indices_to_replace,
+    kind,
+):
+    """
+    Causal tracing: patch hidden states at selected layers/tokens,
+    compare probability assigned to correct/incorrect entity referents.
+    """
+    if indices_to_replace is None:
+        # Find pronoun positions instead of using final token
+        indices_to_replace = find_pronoun_positions(mt.tokenizer, inp["input_ids"])
+        print(f"Auto-detected pronoun positions: {indices_to_replace}")
+
+    def untuple(x):
+        return x[0] if isinstance(x, tuple) else x
+
+    def patch_rep_seqScoring(x, layer):
+        if layer not in patch_spec:
+            return x
+        h = untuple(x)
+        for t in patch_spec[layer]:
+            h[0, t] = h[1, t]
+        return x
+
+    probs_table_corr, probs_table_incorr = [], []
+    other_token_probs = defaultdict(list)
+    for layer in range(mt.num_layers):
+        lname = layername(mt, layer, kind)
+        states_to_patch = [(token_pos, lname) for token_pos in indices_to_replace]
+        patch_spec = defaultdict(list)
+        for t, l in states_to_patch:
+            patch_spec[l].append(t)
+        # Use the updated scoring function!
+        with torch.inference_mode(), nethook.TraceDict(
+            mt.model,
+            list(patch_spec.keys()),
+            edit_output=patch_rep_seqScoring,
+        ):
+            p, l, logprob_info = score_winobias_target(
+                mt,
+                inp,
+                answers_t,
+                answer_token_seqs=None,
+                counterfactual=False,
+            )
+        probs_table_corr.append(p[1])
+        probs_table_incorr.append(p[2])
+    return probs_table_corr, probs_table_incorr, other_token_probs
+
+def layername(mt, num, kind):
+    model = mt.model
+    if hasattr(model, "transformer"):
+        if kind == "embed":
+            layername = "transformer.wte"
+        else:
+            layername = f'transformer.h.{num}{"" if kind is None else "." + kind}'
+    elif hasattr(model, "model"):
+        if kind == "embed":
+            layername = "model.embed_tokens"
+        else:
+            if kind == "attn":
+                kind = "self_attn"
+            layername = f'model.layers.{num}{"" if kind is None else "." + kind}'
+    else:
+        raise Exception("unknown transformer structure")
+    if layername not in [n for n, _ in mt.model.named_modules()]:
+        raise Exception("invalid layername: ", layername)
+    return layername
+
+class ModelAndTokenizer:
+    """
+    Holds a language model and tokenizer, counts the number of layers.
+    """
+    def __init__(
+        self,
+        model_name,
+        model=None,
+        tokenizer=None,
+        no_model_load=False,
+        llama_path=None,
+        device_map="auto",        
+        low_cpu_mem_usage=True      
+    ):
+        if tokenizer is None:
+            assert model_name is not None
+            # tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+            tokenizer = LlamaTokenizer.from_pretrained(model_name, use_auth_token=HF_TOKEN)
+        if no_model_load:
+            model = None
+        elif model is None:
+            assert model_name is not None
+            model = LlamaForCausalLM.from_pretrained(
+                model_name, 
+                device_map="auto", 
+                # quantization_config=bnb_config,
+                low_cpu_mem_usage=True,
+                use_auth_token=HF_TOKEN)
+            model.eval()
+        if not no_model_load:
+            self.model = model
+            self.layer_names = [
+                n for n, m in model.named_modules()
+                if re.match(r"^(transformer|gpt_neox|model)\.(h|layers|transformer\.blocks)\.\d+$", n)
+            ]
+            self.num_layers = len(self.layer_names)
+        else:
+            if "13b" in model_name:
+                self.num_layers = 40
+            elif "7b" in model_name:
+                self.num_layers = 32
+            else:
+                raise Exception("unknown model size")
+        self.tokenizer = tokenizer
+        if not no_model_load:
+            if ("13b" in model_name and self.num_layers != 40) or (
+                "7b" in model_name and self.num_layers != 32
+            ):
+                breakpoint()
+    def __repr__(self):
+        return (
+            f"ModelAndTokenizer(model: {type(self.model).__name__} "
+            f"[{self.num_layers} layers], "
+            f"tokenizer: {type(self.tokenizer).__name__})"
         )
-        results[variant] = result
-    
-    # Add two-way comparison metrics (baseline vs safety)
-    if "baseline" in results and "safety" in results:
-        baseline_bias = results["baseline"]["base_probs_logs"][0][0]  # prob difference
-        safety_bias = results["safety"]["base_probs_logs"][0][0]
-        
-        results["safety_comparison"] = {
-            "baseline_bias": baseline_bias,
-            "safety_bias": safety_bias,
-            "bias_reduction": baseline_bias - safety_bias,
-            "safety_effectiveness": abs(safety_bias) < abs(baseline_bias),
-            "bias_direction_change": (baseline_bias > 0) != (safety_bias > 0)
-        }
-    
-    # Add three-way comparison metrics (baseline vs safety vs jailbreak)
-    if all(v in results for v in ["baseline", "safety", "jailbreak"]):
-        baseline_bias = results["baseline"]["base_probs_logs"][0][0]
-        safety_bias = results["safety"]["base_probs_logs"][0][0] 
-        jailbreak_bias = results["jailbreak"]["base_probs_logs"][0][0]
-        
-        results["three_way_comparison"] = {
-            "baseline_bias": baseline_bias,
-            "safety_bias": safety_bias, 
-            "jailbreak_bias": jailbreak_bias,
-            "jailbreak_vs_baseline": jailbreak_bias - baseline_bias,
-            "jailbreak_vs_safety": jailbreak_bias - safety_bias,
-            "jailbreak_restores_bias": abs(jailbreak_bias) > abs(safety_bias),
-            "pathway_reuse": abs(jailbreak_bias - baseline_bias) < abs(baseline_bias) * 0.1  # Similar to baseline
-        }
-    
-    return results
+
+#########################################################################################################
+######################################## JAILBREAKING ANALYSIS ##########################################
+#########################################################################################################
 
 def analyze_pathway_reuse(baseline_result, jailbreak_result):
     """
