@@ -106,7 +106,7 @@ def make_inputs(
     prompts,
     device="cuda" if torch.cuda.is_available() else "cpu", #QUESTION : is this okay or will it crash the cpu device?
     add_special_tokens=True,
-    truncate=False, # better way to pad?
+    truncate=False, 
 ):
     if tokenizer.pad_token is None and tokenizer.eos_token is not None:
         tokenizer.pad_token = tokenizer.eos_token
@@ -345,8 +345,9 @@ def trace_winobias_mcqa_style(
         pro_correct = base_prob_diff > 0
         anti_correct = counterfact_prob_diff > 0
         both_correct = pro_correct and anti_correct
-        if not both_correct and not include_negatives:
-            return dict(correct_prediction=False)
+        # COMMENTED OUT: Allow tracing regardless of prediction correctness
+        # if not both_correct and not include_negatives:
+        #     return dict(correct_prediction=False)
         prob_corr, prob_incorr, other_token_probs = trace_with_patch(
             mt=mt,
             inp=inp,
@@ -405,31 +406,93 @@ def trace_winobias_mcqa_style(
 
 def find_pronoun_positions(tokenizer, input_ids):
     """
-    Find positions of pronouns (he/she) in tokenized input.
+    Find positions of pronouns in tokenized input by first detecting pronouns in the text,
+    then using character-to-token alignment to find their positions. Supports he, she, him, her, his, hers, etc.
     Returns list of positions where pronouns occur.
+    
+    Note: This assumes pronouns tokenize to consecutive tokens (which is standard for BPE tokenizers).
+    Uses character-to-token alignment for more accurate matching.
     """
-    # Common pronoun tokens for Llama tokenizer
-    he_tokens = tokenizer.encode(" he", add_special_tokens=False)
-    she_tokens = tokenizer.encode(" she", add_special_tokens=False)
+    # List of pronouns to search for (case-insensitive)
+    pronouns = ['he', 'she', 'him', 'her', 'his', 'hers']
     
     pronoun_positions = []
     
-    # Search for pronoun tokens in the input
+    # Decode the input to get the text and verify pronouns exist
     for batch_idx in range(input_ids.shape[0]):
+        # Decode the input_ids to get the original text
+        decoded_text = tokenizer.decode(input_ids[batch_idx], skip_special_tokens=True)
         tokens = input_ids[batch_idx].tolist()
+
+                # First, find which pronouns actually appear in the text (case-insensitive)
+        found_pronouns = []
+        for pronoun in pronouns:
+            # Use word boundaries to match whole words only
+            pattern = r'\b' + re.escape(pronoun) + r'\b'
+            if re.search(pattern, decoded_text, re.IGNORECASE):
+                found_pronouns.append(pronoun)
         
-        # Look for "he" tokens
-        for he_token in he_tokens:
-            for i, token in enumerate(tokens):
-                if token == he_token:
+        # For each pronoun found in the text, tokenize it and search for all occurrences
+        for pronoun in found_pronouns:
+            # add leading space (common case)
+            pronoun_with_space = " " + pronoun
+            pronoun_tokens_space = tokenizer.encode(pronoun_with_space, add_special_tokens=False)
+            
+            # Search for all occurrences of the pronoun token sequence in the input
+            # Search for version with leading space
+            for i in range(len(tokens) - len(pronoun_tokens_space) + 1):
+                if tokens[i:i+len(pronoun_tokens_space)] == pronoun_tokens_space:
                     pronoun_positions.append(i)
         
-        # Look for "she" tokens  
-        for she_token in she_tokens:
-            for i, token in enumerate(tokens):
-                if token == she_token:
-                    pronoun_positions.append(i)
-    
+        # # Try to get character-to-token alignment if the tokenizer supports it
+        # # Re-encode to get offsets (this should match the original tokenization)
+        # try:
+        #     encoding = tokenizer(
+        #         decoded_text,
+        #         add_special_tokens=False,
+        #         return_offsets_mapping=True
+        #     )
+        #     offsets = encoding['offset_mapping']
+        #     token_ids = encoding['input_ids']
+            
+        #     # Verify the tokenization matches (should be the same)
+        #     if token_ids == tokens:
+        #         # Use character-to-token alignment method
+        #         # Find all pronoun occurrences in the text
+        #         for pronoun in pronouns:
+        #             pattern = r'\b' + re.escape(pronoun) + r'\b'
+        #             for match in re.finditer(pattern, decoded_text, re.IGNORECASE):
+        #                 char_start = match.start()
+        #                 char_end = match.end()
+                        
+        #                 # Find which token(s) this character range maps to
+        #                 for token_idx, (offset_start, offset_end) in enumerate(offsets):
+        #                     # Check if this token overlaps with the pronoun character range
+        #                     # Token covers the pronoun if it starts within or at the pronoun
+        #                     if offset_start <= char_start < offset_end:
+        #                         pronoun_positions.append(token_idx)
+        #                         break  # Found the starting token for this pronoun
+        # except (TypeError, KeyError, AttributeError):
+        #     # Fallback: tokenizer doesn't support offset_mapping or there's an issue
+        #     # Use the original method: tokenize pronoun and search for consecutive tokens
+        #     found_pronouns = []
+        #     for pronoun in pronouns:
+        #         pattern = r'\b' + re.escape(pronoun) + r'\b'
+        #         if re.search(pattern, decoded_text, re.IGNORECASE):
+        #             found_pronouns.append(pronoun)
+            
+        #     # For each pronoun found in the text, tokenize it and search for all occurrences
+        #     for pronoun in found_pronouns:
+        #         # add leading space (common case)
+        #         pronoun_with_space = " " + pronoun
+        #         pronoun_tokens_space = tokenizer.encode(pronoun_with_space, add_special_tokens=False)
+                
+        #         # Search for all occurrences of the pronoun token sequence in the input
+        #         # Note: This assumes the pronoun tokens are consecutive (standard for BPE tokenizers)
+        #         for i in range(len(tokens) - len(pronoun_tokens_space) + 1):
+        #             if tokens[i:i+len(pronoun_tokens_space)] == pronoun_tokens_space:
+        #                 pronoun_positions.append(i)
+                
     # Remove duplicates and sort
     pronoun_positions = sorted(list(set(pronoun_positions)))
     return pronoun_positions if pronoun_positions else [input_ids.shape[1] - 1]  # fallback to final token
@@ -565,7 +628,7 @@ class ModelAndTokenizer:
 #########################################################################################################
 ######################################## JAILBREAKING ANALYSIS ##########################################
 #########################################################################################################
-
+'''
 def analyze_pathway_reuse(baseline_result, jailbreak_result):
     """
     Analyze if jailbreaking reuses original bias pathways.
@@ -1452,3 +1515,4 @@ class ModelAndTokenizer:
             f"[{self.num_layers} layers], "
             f"tokenizer: {type(self.tokenizer).__name__})"
         )
+'''

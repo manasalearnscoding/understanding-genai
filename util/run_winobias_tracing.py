@@ -4,12 +4,13 @@ from scoring_and_patching_utils import (
     ModelAndTokenizer,
     trace_winobias_mcqa_style,
     compute_winobias_accuracy,
-    WinoBiasVocabProjector,
-    trace_winobias_component_specific,
-    compare_component_contributions,
-    analyze_mlp_vs_attention_bias,
+    # WinoBiasVocabProjector,
+    # trace_winobias_component_specific,
+    # compare_component_contributions,
+    # analyze_mlp_vs_attention_bias,
 )
 import jsonlines
+import time
 
 #ADD HUGGINGFACE AUTHENTICATION HERE
 import os
@@ -42,7 +43,7 @@ if __name__ == "__main__":
     parser.add_argument("--component_type", type=str, default="mlp",
                        choices=["mlp", "attn", "attn_heads"],
                        help="Component type for component-specific tracing")
-    parser.add_argument("--vocab_k", type=int, default=20,
+    parser.add_argument("--vocab_k", type=int, default=10,
                        help="Number of top-k tokens to analyze in vocabulary projection")
     # parser.add_argument("--accuracy_only", action="store_true", help="If set, only computes accuracy, no causal tracing.")
     args = parser.parse_args()
@@ -71,6 +72,7 @@ if __name__ == "__main__":
             
             # Choose analysis type
             if args.analysis_type == "causal_trace":
+                start_time = time.time()
                 result = trace_winobias_mcqa_style(
                     mt=mt,
                     example=example,
@@ -80,6 +82,8 @@ if __name__ == "__main__":
                     safety_prompt_key=args.safety_prompt_key,
                     jailbreak_prompt_key=args.jailbreak_prompt_key
                 )
+                end_time = time.time()
+                print(f"Causal trace time: {end_time - start_time} seconds")
             elif args.analysis_type == "vocab_projection":
                 projector = WinoBiasVocabProjector(mt)
                 result = projector.analyze_bias_emergence(

@@ -5,6 +5,4 @@ temp_results/
 *.log
 .env
 *.jsonl
-paired_*.jsonl
-vocab_proj_*.jsonl
-winobias_*.jsonl
+util/test_functions.py
