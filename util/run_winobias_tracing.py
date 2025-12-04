@@ -84,6 +84,8 @@ if __name__ == "__main__":
                 )
                 end_time = time.time()
                 print(f"Causal trace time: {end_time - start_time} seconds")
+
+            '''    
             elif args.analysis_type == "vocab_projection":
                 projector = WinoBiasVocabProjector(mt)
                 result = projector.analyze_bias_emergence(
@@ -94,6 +96,8 @@ if __name__ == "__main__":
                     k=args.vocab_k
                 )
                 result["analysis_type"] = "vocab_projection"
+
+
             elif args.analysis_type == "vocab_projection_paired":
                 projector = WinoBiasVocabProjector(mt)
                 result = projector.analyze_bias_emergence_paired(
@@ -104,6 +108,8 @@ if __name__ == "__main__":
                     k=args.vocab_k
                 )
                 result["analysis_type"] = "vocab_projection_paired"
+
+
             elif args.analysis_type == "component_trace":
                 result = trace_winobias_component_specific(
                     mt=mt,
@@ -114,6 +120,8 @@ if __name__ == "__main__":
                     jailbreak_prompt_key=args.jailbreak_prompt_key
                 )
                 result["analysis_type"] = "component_trace"
+
+
             elif args.analysis_type == "mlp_vs_attention":
                 result = analyze_mlp_vs_attention_bias(
                     mt=mt,
@@ -124,8 +132,9 @@ if __name__ == "__main__":
             else:
                 raise ValueError(f"Unknown analysis type: {args.analysis_type}")
             
+            '''
             writer.write(result)
-            
+
             if args.analysis_type == "causal_trace":
                 if result.get("correct_prediction", False):
                     print("Prediction: CORRECT")
@@ -133,9 +142,13 @@ if __name__ == "__main__":
                     print("Skipped:", result["skip_reason"])
                 else:
                     print("Prediction: INCORRECT")
+        
+        '''
             elif args.analysis_type == "vocab_projection":
                 bias_analysis = result.get("bias_analysis", {})
                 print(f"Bias emergence analysis completed. First bias layer: {bias_analysis.get('male_terms_emergence_first_layer', 'N/A')}")
+            
+            
             elif args.analysis_type == "vocab_projection_paired":
                 comparison = result.get("paired_comparison", {})
                 bias_ind = comparison.get("bias_indicators", {})
@@ -146,11 +159,16 @@ if __name__ == "__main__":
                     print(f"  Layer difference: {bias_ind['layer_difference']}")
                     print(f"  Stereotypical emerges earlier: {bias_ind.get('stereotypical_emerges_earlier', 'N/A')}")
                 print(f"  Bias strength: {bias_ind.get('bias_strength', 'N/A')}")
+            
+            
             elif args.analysis_type == "component_trace":
                 comp_analysis = result.get("component_analysis", {})
                 print(f"Component analysis ({args.component_type}): Max bias at layer {comp_analysis.get('max_bias_layer', 'N/A')}")
+            
+            
             elif args.analysis_type == "mlp_vs_attention":
                 summary = result.get("summary", {})
                 print(f"MLP vs Attention: MLP dominance = {summary.get('consistent_mlp_dominance', False)}")
 
+'''
     print(f"\nDone! Results saved to {args.output_file}")

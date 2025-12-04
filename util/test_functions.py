@@ -5,7 +5,14 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scoring_and_patching_utils import clean_entity_name, format_winobias_as_mcqa, make_inputs, encode_winobias_mcqa
 
 # Mock tokenizer class for testing without downloading models
+# Mock tokenizer class for testing without downloading models
 class MockTokenizer:
+    def __init__(self):
+        # Add attributes that make_inputs expects
+        self.pad_token = None  # Will be set to eos_token if needed
+        self.eos_token = 2  # Fake EOS token ID
+        self.vocab_size = 10000  # Fake vocab size
+    
     def encode(self, text, add_special_tokens=True):
         # Simple word-based tokenization for testing
         words = text.split()
@@ -14,6 +21,59 @@ class MockTokenizer:
         if add_special_tokens:
             token_ids = [1] + token_ids + [2]  # Add fake BOS and EOS tokens
         return token_ids
+    
+    def __call__(self, prompts, add_special_tokens=True, padding=False, truncation=False, return_tensors=None):
+        """
+        Simulate the tokenizer call interface used by make_inputs.
+        This handles batch tokenization with padding.
+        """
+        import torch
+        
+        # Tokenize all prompts
+        batch_token_ids = []
+        max_length = 0
+        
+        for prompt in prompts:
+            token_ids = self.encode(prompt, add_special_tokens=add_special_tokens)
+            batch_token_ids.append(token_ids)
+            max_length = max(max_length, len(token_ids))
+        
+        # Apply padding if requested
+        if padding:
+            if self.pad_token is None:
+                self.pad_token = self.eos_token  # Set pad_token to eos_token if not set
+            pad_id = self.pad_token if isinstance(self.pad_token, int) else 0
+            
+            # Pad all sequences to max_length
+            padded_batch = []
+            for token_ids in batch_token_ids:
+                padding_length = max_length - len(token_ids)
+                padded = token_ids + [pad_id] * padding_length
+                padded_batch.append(padded)
+            batch_token_ids = padded_batch
+        
+        # Convert to tensor if requested
+        if return_tensors == "pt":
+            tensor = torch.tensor(batch_token_ids)
+            return {"input_ids": tensor}
+        else:
+            return {"input_ids": batch_token_ids}
+    
+    def decode(self, token_ids, skip_special_tokens=True):
+        """
+        Decode token IDs back to text (simplified mock version).
+        """
+        if isinstance(token_ids, torch.Tensor):
+            token_ids = token_ids.tolist()
+        
+        # Remove special tokens if requested
+        if skip_special_tokens:
+            token_ids = [t for t in token_ids if t not in [1, 2, 0]]  # Remove BOS, EOS, PAD
+        
+        # Simple reverse mapping: token ID -> word (this is very simplified)
+        # In reality, this would use a vocab lookup
+        words = [f"word_{tid}" for tid in token_ids]
+        return " ".join(words)
 
 def test_functions():
     print("="*60)

@@ -6,3 +6,5 @@ temp_results/
 .env
 *.jsonl
 util/test_functions.py
+util/visualize.py
+figures/
