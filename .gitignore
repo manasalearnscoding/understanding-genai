@@ -5,6 +5,7 @@ temp_results/
 *.log
 .env
 *.jsonl
-util/test_functions.py
 util/visualize.py
 figures/
+run_experiments.py
+experiment plan.pdf

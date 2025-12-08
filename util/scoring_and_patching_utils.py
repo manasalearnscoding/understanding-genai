@@ -219,7 +219,7 @@ def score_winobias_target(
     )
 
     if counterfactual and logits.shape[0] > 1:  # If comparing two prompts (e.g., "he" vs "she")
-        print('counterfactual')
+        # print('counterfactual')
         if len(answers_t) >= 4:  # If we have separate tokens for the second prompt
             contrast_corr_token = answers_t[2]  # Correct token for second prompt
             contrast_incorr_token = answers_t[3]  # Incorrect token for second prompt
@@ -602,290 +602,221 @@ class ModelAndTokenizer:
         )
 
 #########################################################################################################
-######################################## JAILBREAKING ANALYSIS ##########################################
-#########################################################################################################
-'''
-def analyze_pathway_reuse(baseline_result, jailbreak_result):
-    """
-    Analyze if jailbreaking reuses original bias pathways.
-    Compares layer-by-layer activation patterns.
-    
-    Args:
-        baseline_result: Results from M_B model variant
-        jailbreak_result: Results from M_J model variant
-        
-    Returns:
-        dict: Analysis of pathway reuse patterns
-    """
-    baseline_layers = baseline_result["probits_correct"]
-    jailbreak_layers = jailbreak_result["probits_correct"]
-    
-    # Calculate correlation between layer patterns
-    import numpy as np
-    correlation = np.corrcoef(baseline_layers, jailbreak_layers)[0,1]
-    
-    # Calculate layer-wise differences
-    differences = [abs(b - j) for b, j in zip(baseline_layers, jailbreak_layers)]
-    max_diff_layer = differences.index(max(differences))
-    
-    return {
-        "pathway_correlation": correlation,
-        "likely_reuses_pathways": correlation > 0.7,
-        "max_difference_layer": max_diff_layer,
-        "layer_differences": differences,
-        "average_difference": sum(differences) / len(differences)
-    }
-
-def detect_new_pathways(safety_result, jailbreak_result):
-    """
-    Detect if jailbreaking creates new bias pathways different from safety alignment.
-    
-    Args:
-        safety_result: Results from M_S model variant
-        jailbreak_result: Results from M_J model variant
-        
-    Returns:
-        dict: Analysis of new pathway creation
-    """
-    safety_layers = safety_result["probits_correct"] 
-    jailbreak_layers = jailbreak_result["probits_correct"]
-    
-    # Find layers where jailbreak differs most from safety
-    differences = [abs(s - j) for s, j in zip(safety_layers, jailbreak_layers)]
-    max_diff_layer = differences.index(max(differences))
-    
-    # Calculate divergence patterns
-    early_layers_diff = sum(differences[:len(differences)//3]) / (len(differences)//3)
-    late_layers_diff = sum(differences[2*len(differences)//3:]) / (len(differences)//3)
-    
-    return {
-        "max_difference_layer": max_diff_layer,
-        "creates_new_pathways": max(differences) > 0.01,  # Threshold for "new" pathway
-        "layer_differences": differences,
-        "early_layers_divergence": early_layers_diff,
-        "late_layers_divergence": late_layers_diff,
-        "divergence_pattern": "early" if early_layers_diff > late_layers_diff else "late"
-    }
-
-def analyze_jailbreak_strategy_differences(mt, example, jailbreak_strategies=["roleplay", "character", "hypothetical"]):
-    """
-    Compare different jailbreaking strategies to see if they use similar pathways.
-    
-    Args:
-        mt: ModelAndTokenizer instance
-        example: WinoBias example dict
-        jailbreak_strategies: List of jailbreak prompt keys to compare
-        
-    Returns:
-        dict: Comparison of different jailbreak strategies
-    """
-    strategy_results = {}
-    
-    for strategy in jailbreak_strategies:
-        print(f"Testing jailbreak strategy: {strategy}")
-        result = trace_winobias_mcqa_style(
-            mt, example,
-            model_variant="jailbreak",
-            jailbreak_prompt_key=strategy
-        )
-        strategy_results[strategy] = result
-    
-    # Compare strategies pairwise
-    comparisons = {}
-    strategies = list(strategy_results.keys())
-    
-    for i, strategy1 in enumerate(strategies):
-        for strategy2 in strategies[i+1:]:
-            layers1 = strategy_results[strategy1]["probits_correct"]
-            layers2 = strategy_results[strategy2]["probits_correct"]
-            
-            import numpy as np
-            correlation = np.corrcoef(layers1, layers2)[0,1]
-            
-            comparisons[f"{strategy1}_vs_{strategy2}"] = {
-                "correlation": correlation,
-                "similar_pathways": correlation > 0.8,
-                "bias_difference": abs(
-                    strategy_results[strategy1]["base_probs_logs"][0][0] - 
-                    strategy_results[strategy2]["base_probs_logs"][0][0]
-                )
-            }
-    
-    return {
-        "strategy_results": strategy_results,
-        "pairwise_comparisons": comparisons,
-        "most_similar_strategies": max(comparisons.keys(), key=lambda k: comparisons[k]["correlation"]),
-        "most_different_strategies": min(comparisons.keys(), key=lambda k: comparisons[k]["correlation"])
-    }
-
-
-#########################################################################################################
-################################## COMPONENT-SPECIFIC TRACING ########################################
+################################## FINE-GRAINED ACTIVATION PATCHING ###################################
 #########################################################################################################
 
-def trace_winobias_component_specific(
-    mt, example, component_type="mlp", 
-    model_variant="baseline", safety_prompt_key="fair", jailbreak_prompt_key="roleplay"
+def trace_attention_heads(
+    mt,
+    inp,
+    answers_t,
+    indices_to_replace=None,
+    layers_to_trace=None,
 ):
     """
-    Run causal tracing on specific model components (MLP, attention, attention heads).
+    Causal tracing for individual attention heads (Figure 13 style).
     
-    Args:
-        mt: ModelAndTokenizer instance
-        example: WinoBias example dict
-        component_type: "mlp", "attn", or "attn_heads"
-        model_variant: "baseline", "safety", or "jailbreak"
-        
-    Returns:
-        dict: Component-specific tracing results
+    Patches each attention head separately to identify which heads
+    are causally responsible for the prediction.
     """
-    # Use existing trace function with component specification
-    result = trace_winobias_mcqa_style(
-        mt=mt,
-        example=example,
-        kind=component_type,  # This gets passed to layername() function
+    if indices_to_replace is None:
+        indices_to_replace = find_pronoun_positions(mt.tokenizer, inp["input_ids"])
+    
+    if layers_to_trace is None:
+        # Default to last 10 layers (like Figure 13)
+        layers_to_trace = list(range(max(0, mt.num_layers - 10), mt.num_layers))
+    
+    # Get architecture info
+    num_heads = mt.model.config.num_attention_heads
+    head_dim = mt.model.config.hidden_size // num_heads
+    
+    # Get baseline (no patching)
+    with torch.inference_mode():
+        baseline_outputs = mt.model(input_ids=inp["input_ids"], return_dict=True)
+    baseline_logits = baseline_outputs.logits[0, -1, :]
+    baseline_probs = F.softmax(baseline_logits, dim=-1)
+    
+    results = {
+        "layers_traced": layers_to_trace,
+        "num_heads": num_heads,
+        "baseline": {
+            "prob_correct": baseline_probs[answers_t[0]].item(),
+            "prob_incorrect": baseline_probs[answers_t[1]].item(),
+            "logit_correct": baseline_logits[answers_t[0]].item(),
+            "logit_incorrect": baseline_logits[answers_t[1]].item(),
+            "logit_diff": baseline_logits[answers_t[0]].item() - baseline_logits[answers_t[1]].item(),
+        },
+        "head_results": {},
+    }
+    
+    for layer_idx in layers_to_trace:
+        results["head_results"][layer_idx] = {}
+        
+        for head_idx in range(num_heads):
+            head_effect = _patch_single_attention_head(
+                mt, inp, answers_t, indices_to_replace,
+                layer_idx, head_idx, num_heads, head_dim
+            )
+            # Add change from baseline
+            head_effect["logit_diff_change"] = (
+                head_effect["logit_diff"] - results["baseline"]["logit_diff"]
+            )
+            results["head_results"][layer_idx][head_idx] = head_effect
+    
+    # Find most impactful heads per layer
+    results["top_heads_per_layer"] = {}
+    for layer_idx in layers_to_trace:
+        head_effects = [
+            (head_idx, abs(results["head_results"][layer_idx][head_idx]["logit_diff_change"]))
+            for head_idx in range(num_heads)
+        ]
+        head_effects.sort(key=lambda x: x[1], reverse=True)
+        results["top_heads_per_layer"][layer_idx] = head_effects[:5]
+    
+    return results
+
+
+def _patch_single_attention_head(
+    mt, inp, answers_t, indices_to_replace,
+    layer_idx, head_idx, num_heads, head_dim
+):
+    """
+    Patch a single attention head's output and measure effect.
+    
+    Note: This patches the o_proj output, which is an approximation.
+    True per-head patching would require hooking before o_proj.
+    """
+    def patch_head_output(output, layer):
+        h = output[0] if isinstance(output, tuple) else output
+        for t in indices_to_replace:
+            # Patch only this head's portion of the hidden state
+            start_idx = head_idx * head_dim
+            end_idx = (head_idx + 1) * head_dim
+            h[0, t, start_idx:end_idx] = h[1, t, start_idx:end_idx]
+        return (h,) + output[1:] if isinstance(output, tuple) else h
+    
+    layer_name = layername(mt, layer_idx, kind="attn")
+    
+    with torch.inference_mode(), nethook.TraceDict(
+        mt.model,
+        [layer_name],
+        edit_output=patch_head_output,
+    ):
+        outputs = mt.model(input_ids=inp["input_ids"], return_dict=True)
+    
+    last_logits = outputs.logits[0, -1, :]
+    last_probs = F.softmax(last_logits, dim=-1)
+    
+    return {
+        "prob_correct": last_probs[answers_t[0]].item(),
+        "prob_incorrect": last_probs[answers_t[1]].item(),
+        "logit_correct": last_logits[answers_t[0]].item(),
+        "logit_incorrect": last_logits[answers_t[1]].item(),
+        "logit_diff": last_logits[answers_t[0]].item() - last_logits[answers_t[1]].item(),
+    }
+
+
+def trace_winobias_attention_heads(
+    mt,
+    example,
+    layers_to_trace=None,
+    model_variant="baseline",
+    safety_prompt_key="fair",
+    jailbreak_prompt_key="roleplay"
+):
+    """
+    High-level wrapper: Run attention head-level causal tracing on WinoBias.
+    """
+    prompt_type_map = {"baseline": "baseline", "safety": "safety", "jailbreak": "jailbreak"}
+    formatted_example = format_winobias_as_mcqa(
+        example,
+        prompt_type=prompt_type_map[model_variant],
+        safety_prompt_key=safety_prompt_key,
+        jailbreak_prompt_key=jailbreak_prompt_key
+    )
+    
+    (
+        inp, answers_t, pro_prompt, anti_prompt,
+        correct_entity, other_entity, _
+    ) = encode_winobias_mcqa(
+        mt.tokenizer, formatted_example,
+        accuracy_only=False, return_token_seqs=False
+    )
+    
+    head_results = trace_attention_heads(
+        mt, inp, answers_t,
+        indices_to_replace=None,
+        layers_to_trace=layers_to_trace
+    )
+    
+    head_results["model_variant"] = model_variant
+    head_results["example_index"] = example.get("index", -1)
+    head_results["correct_entity"] = correct_entity
+    head_results["other_entity"] = other_entity
+    
+    return head_results
+
+
+def compare_mlp_vs_attn_patching(
+    mt,
+    example,
+    model_variant="baseline",
+    safety_prompt_key="fair",
+    jailbreak_prompt_key="roleplay"
+):
+    """
+    Compare MLP vs Attention causal effects using your existing trace function.
+    This wraps trace_winobias_mcqa_style with kind="mlp" and kind="attn".
+    """
+    print("Tracing MLP component...")
+    mlp_result = trace_winobias_mcqa_style(
+        mt, example, kind="mlp",
         model_variant=model_variant,
         safety_prompt_key=safety_prompt_key,
         jailbreak_prompt_key=jailbreak_prompt_key
     )
     
-    # Add component-specific metadata
-    result["component_type"] = component_type
-    result["component_analysis"] = _analyze_component_contributions(
-        result.get("probits_correct", []), 
-        result.get("probits_incorrect", []),
-        component_type
+    print("Tracing Attention component...")
+    attn_result = trace_winobias_mcqa_style(
+        mt, example, kind="attn",
+        model_variant=model_variant,
+        safety_prompt_key=safety_prompt_key,
+        jailbreak_prompt_key=jailbreak_prompt_key
     )
     
-    return result
-
-def _analyze_component_contributions(prob_correct, prob_incorrect, component_type):
-    """Analyze how different components contribute to bias."""
-    if not prob_correct or not prob_incorrect:
-        return {}
+    print("Tracing full layers...")
+    full_result = trace_winobias_mcqa_style(
+        mt, example, kind=None,
+        model_variant=model_variant,
+        safety_prompt_key=safety_prompt_key,
+        jailbreak_prompt_key=jailbreak_prompt_key
+    )
     
-    # Calculate layer-wise bias (correct - incorrect probability)
-    layer_bias = [c - i for c, i in zip(prob_correct, prob_incorrect)]
+    # Compute comparison metrics
+    def get_max_effect(result):
+        if not result.get("probits_correct") or not result.get("probits_incorrect"):
+            return 0, -1
+        diffs = [c - i for c, i in zip(result["probits_correct"], result["probits_incorrect"])]
+        max_idx = max(range(len(diffs)), key=lambda i: abs(diffs[i]))
+        return diffs[max_idx], max_idx
     
-    # Find layers with strongest bias
-    max_bias_layer = layer_bias.index(max(layer_bias)) if layer_bias else -1
-    min_bias_layer = layer_bias.index(min(layer_bias)) if layer_bias else -1
-    
-    # Calculate bias progression
-    early_bias = np.mean(layer_bias[:len(layer_bias)//3]) if layer_bias else 0
-    middle_bias = np.mean(layer_bias[len(layer_bias)//3:2*len(layer_bias)//3]) if layer_bias else 0
-    late_bias = np.mean(layer_bias[2*len(layer_bias)//3:]) if layer_bias else 0
-    
-    return {
-        "component_type": component_type,
-        "layer_bias_scores": layer_bias,
-        "max_bias_layer": max_bias_layer,
-        "min_bias_layer": min_bias_layer,
-        "max_bias_value": max(layer_bias) if layer_bias else 0,
-        "min_bias_value": min(layer_bias) if layer_bias else 0,
-        "early_layers_bias": early_bias,
-        "middle_layers_bias": middle_bias,
-        "late_layers_bias": late_bias,
-        "bias_progression": "increasing" if late_bias > early_bias else "decreasing"
-    }
-
-def compare_component_contributions(mt, example, components=["mlp", "attn"], 
-                                  model_variant="baseline", safety_prompt_key="fair", jailbreak_prompt_key="roleplay"):
-    """
-    Compare bias contributions across different model components.
-    
-    Args:
-        mt: ModelAndTokenizer instance
-        example: WinoBias example dict
-        components: List of components to compare ["mlp", "attn", "attn_heads"]
-        model_variant: Model variant to analyze
-        
-    Returns:
-        dict: Comparison of component contributions
-    """
-    component_results = {}
-    
-    for component in components:
-        print(f"Tracing {component} component...")
-        result = trace_winobias_component_specific(
-            mt, example, component_type=component,
-            model_variant=model_variant, 
-            safety_prompt_key=safety_prompt_key,
-            jailbreak_prompt_key=jailbreak_prompt_key
-        )
-        component_results[component] = result
-    
-    # Compare components
-    comparison = {}
-    if len(components) >= 2:
-        for i, comp1 in enumerate(components):
-            for comp2 in components[i+1:]:
-                if comp1 in component_results and comp2 in component_results:
-                    bias1 = component_results[comp1]["component_analysis"]["max_bias_value"]
-                    bias2 = component_results[comp2]["component_analysis"]["max_bias_value"]
-                    
-                    comparison[f"{comp1}_vs_{comp2}"] = {
-                        "bias_difference": abs(bias1 - bias2),
-                        "stronger_component": comp1 if abs(bias1) > abs(bias2) else comp2,
-                        f"{comp1}_max_bias": bias1,
-                        f"{comp2}_max_bias": bias2
-                    }
+    mlp_max, mlp_layer = get_max_effect(mlp_result)
+    attn_max, attn_layer = get_max_effect(attn_result)
+    full_max, full_layer = get_max_effect(full_result)
     
     return {
-        "component_results": component_results,
-        "component_comparison": comparison,
+        "mlp_results": mlp_result,
+        "attn_results": attn_result,
+        "full_results": full_result,
+        "comparison": {
+            "mlp_max_effect": mlp_max,
+            "mlp_max_effect_layer": mlp_layer,
+            "attn_max_effect": attn_max,
+            "attn_max_effect_layer": attn_layer,
+            "full_max_effect": full_max,
+            "full_max_effect_layer": full_layer,
+            "dominant_component": "mlp" if abs(mlp_max) > abs(attn_max) else "attn",
+            "mlp_to_attn_ratio": abs(mlp_max) / (abs(attn_max) + 1e-8),
+        },
         "model_variant": model_variant,
-        "example_index": example.get('index', -1)
+        "example_index": example.get("index", -1),
     }
-
-def analyze_mlp_vs_attention_bias(mt, example, model_variants=["baseline", "safety", "jailbreak"]):
-    """
-    Comprehensive analysis of MLP vs Attention bias patterns across model variants.
-    
-    This addresses your research question: "Does bias emerge in attention or MLP layers?"
-    """
-    results = {}
-    
-    for variant in model_variants:
-        print(f"Analyzing MLP vs Attention for {variant} variant...")
-        
-        # Compare MLP and attention components
-        component_comparison = compare_component_contributions(
-            mt, example, 
-            components=["mlp", "attn"],
-            model_variant=variant
-        )
-        
-        results[variant] = component_comparison
-    
-    # Cross-variant analysis
-    cross_variant_analysis = {}
-    if len(model_variants) >= 2:
-        for variant in model_variants:
-            if variant in results:
-                mlp_bias = results[variant]["component_results"]["mlp"]["component_analysis"]["max_bias_value"]
-                attn_bias = results[variant]["component_results"]["attn"]["component_analysis"]["max_bias_value"]
-                
-                cross_variant_analysis[variant] = {
-                    "mlp_dominates": abs(mlp_bias) > abs(attn_bias),
-                    "attention_dominates": abs(attn_bias) > abs(mlp_bias),
-                    "mlp_bias_strength": abs(mlp_bias),
-                    "attention_bias_strength": abs(attn_bias),
-                    "bias_ratio_mlp_to_attn": abs(mlp_bias) / (abs(attn_bias) + 1e-8)
-                }
-    
-    return {
-        "variant_results": results,
-        "cross_variant_analysis": cross_variant_analysis,
-        "summary": {
-            "consistent_mlp_dominance": all(
-                analysis.get("mlp_dominates", False) 
-                for analysis in cross_variant_analysis.values()
-            ),
-            "consistent_attention_dominance": all(
-                analysis.get("attention_dominates", False) 
-                for analysis in cross_variant_analysis.values()
-            )
-        }
-    }
-    '''

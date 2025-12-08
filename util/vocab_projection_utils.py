@@ -540,6 +540,7 @@ def analyze_winobias_component_comparison(
     projector,
     formatted_example,
     tokenizer,
+    k=10
 ):
     """
     Compare MLP vs Attention contributions to bias using vocab projection.
@@ -557,12 +558,12 @@ def analyze_winobias_component_comparison(
     # Run analysis for each component
     mlp_results = analyze_winobias_bias_emergence(
         projector, formatted_example, tokenizer,
-        projection_type="finegrained", component="mlp"
+        projection_type="finegrained", component="mlp", k=10
     )
     
     attn_results = analyze_winobias_bias_emergence(
         projector, formatted_example, tokenizer,
-        projection_type="finegrained", component="attn"
+        projection_type="finegrained", component="attn", k=10
     )
     
     # Compare components
@@ -594,88 +595,88 @@ def analyze_winobias_component_comparison(
     return comparison
 
 
-def analyze_attention_heads_for_bias(
-    projector,
-    formatted_example,
-    tokenizer,
-    layer_idx,
-):
-    """
-    Analyze which attention heads contribute most to bias at a specific layer.
+# def analyze_attention_heads_for_bias(
+#     projector,
+#     formatted_example,
+#     tokenizer,
+#     layer_idx,
+# ):
+#     """
+#     Analyze which attention heads contribute most to bias at a specific layer.
     
-    This mirrors Figure 8 from the Understanding MCQA paper.
+#     This mirrors Figure 8 from the Understanding MCQA paper.
     
-    Args:
-        projector: LlamaVocabProjector instance
-        formatted_example: output of format_winobias_as_mcqa()
-        tokenizer: tokenizer for encoding
-        layer_idx: Which layer to analyze
+#     Args:
+#         projector: LlamaVocabProjector instance
+#         formatted_example: output of format_winobias_as_mcqa()
+#         tokenizer: tokenizer for encoding
+#         layer_idx: Which layer to analyze
         
-    Returns:
-        dict with per-head bias analysis
-    """
-    from scoring_and_patching_utils import make_inputs
+#     Returns:
+#         dict with per-head bias analysis
+#     """
+#     from scoring_and_patching_utils import make_inputs
     
-    # Encode prompts
-    pro_prompt = formatted_example['pro_prompt']
-    anti_prompt = formatted_example['anti_prompt']
-    inp = make_inputs(tokenizer, [pro_prompt, anti_prompt])
+#     # Encode prompts
+#     pro_prompt = formatted_example['pro_prompt']
+#     anti_prompt = formatted_example['anti_prompt']
+#     inp = make_inputs(tokenizer, [pro_prompt, anti_prompt])
     
-    # Get entity token IDs
-    correct_entity = formatted_example['correct_entity']
-    other_entity = formatted_example['other_entity']
-    correct_token_id = tokenizer.encode(" " + correct_entity, add_special_tokens=False)[0]
-    other_token_id = tokenizer.encode(" " + other_entity, add_special_tokens=False)[0]
+#     # Get entity token IDs
+#     correct_entity = formatted_example['correct_entity']
+#     other_entity = formatted_example['other_entity']
+#     correct_token_id = tokenizer.encode(" " + correct_entity, add_special_tokens=False)[0]
+#     other_token_id = tokenizer.encode(" " + other_entity, add_special_tokens=False)[0]
     
-    # Get per-head logits
-    head_logits = projector.get_attention_head_logits(inp["input_ids"], layer_idx)
-    # Shape: [num_heads, vocab_size, batch]
+#     # Get per-head logits
+#     head_logits = projector.get_attention_head_logits(inp["input_ids"], layer_idx)
+#     # Shape: [num_heads, vocab_size, batch]
     
-    num_heads = head_logits.shape[0]
-    probs = F.softmax(head_logits, dim=1)
+#     num_heads = head_logits.shape[0]
+#     probs = F.softmax(head_logits, dim=1)
     
-    results = {
-        "layer_idx": layer_idx,
-        "num_heads": num_heads,
-        "per_head_analysis": [],
-    }
+#     results = {
+#         "layer_idx": layer_idx,
+#         "num_heads": num_heads,
+#         "per_head_analysis": [],
+#     }
     
-    for head_idx in range(num_heads):
-        head_analysis = {
-            "head_idx": head_idx,
-            # Pro-stereotyped (batch 0)
-            "pro_correct_logit": head_logits[head_idx, correct_token_id, 0].item(),
-            "pro_incorrect_logit": head_logits[head_idx, other_token_id, 0].item(),
-            "pro_correct_prob": probs[head_idx, correct_token_id, 0].item(),
-            "pro_incorrect_prob": probs[head_idx, other_token_id, 0].item(),
-            # Anti-stereotyped (batch 1)
-            "anti_correct_logit": head_logits[head_idx, correct_token_id, 1].item(),
-            "anti_incorrect_logit": head_logits[head_idx, other_token_id, 1].item(),
-            "anti_correct_prob": probs[head_idx, correct_token_id, 1].item(),
-            "anti_incorrect_prob": probs[head_idx, other_token_id, 1].item(),
-        }
+#     for head_idx in range(num_heads):
+#         head_analysis = {
+#             "head_idx": head_idx,
+#             # Pro-stereotyped (batch 0)
+#             "pro_correct_logit": head_logits[head_idx, correct_token_id, 0].item(),
+#             "pro_incorrect_logit": head_logits[head_idx, other_token_id, 0].item(),
+#             "pro_correct_prob": probs[head_idx, correct_token_id, 0].item(),
+#             "pro_incorrect_prob": probs[head_idx, other_token_id, 0].item(),
+#             # Anti-stereotyped (batch 1)
+#             "anti_correct_logit": head_logits[head_idx, correct_token_id, 1].item(),
+#             "anti_incorrect_logit": head_logits[head_idx, other_token_id, 1].item(),
+#             "anti_correct_prob": probs[head_idx, correct_token_id, 1].item(),
+#             "anti_incorrect_prob": probs[head_idx, other_token_id, 1].item(),
+#         }
         
-        # Compute bias metrics
-        head_analysis["pro_logit_diff"] = (
-            head_analysis["pro_correct_logit"] - head_analysis["pro_incorrect_logit"]
-        )
-        head_analysis["anti_logit_diff"] = (
-            head_analysis["anti_correct_logit"] - head_analysis["anti_incorrect_logit"]
-        )
+#         # Compute bias metrics
+#         head_analysis["pro_logit_diff"] = (
+#             head_analysis["pro_correct_logit"] - head_analysis["pro_incorrect_logit"]
+#         )
+#         head_analysis["anti_logit_diff"] = (
+#             head_analysis["anti_correct_logit"] - head_analysis["anti_incorrect_logit"]
+#         )
         
-        results["per_head_analysis"].append(head_analysis)
+#         results["per_head_analysis"].append(head_analysis)
     
-    # Find most biased heads
-    pro_diffs = [h["pro_logit_diff"] for h in results["per_head_analysis"]]
-    results["max_bias_head"] = pro_diffs.index(max(pro_diffs, key=abs))
-    results["max_bias_value"] = max(pro_diffs, key=abs)
+#     # Find most biased heads
+#     pro_diffs = [h["pro_logit_diff"] for h in results["per_head_analysis"]]
+#     results["max_bias_head"] = pro_diffs.index(max(pro_diffs, key=abs))
+#     results["max_bias_value"] = max(pro_diffs, key=abs)
     
-    # Summary: heads sorted by absolute bias
-    sorted_heads = sorted(
-        range(num_heads),
-        key=lambda h: abs(results["per_head_analysis"][h]["pro_logit_diff"]),
-        reverse=True
-    )
-    results["heads_by_bias_magnitude"] = sorted_heads[:10]  # Top 10
+#     # Summary: heads sorted by absolute bias
+#     sorted_heads = sorted(
+#         range(num_heads),
+#         key=lambda h: abs(results["per_head_analysis"][h]["pro_logit_diff"]),
+#         reverse=True
+#     )
+#     results["heads_by_bias_magnitude"] = sorted_heads[:10]  # Top 10
     
-    return results
+#     return results

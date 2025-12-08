@@ -4,17 +4,15 @@ from scoring_and_patching_utils import (
     ModelAndTokenizer,
     trace_winobias_mcqa_style,
     compute_winobias_accuracy,
-    format_winobias_as_mcqa
-    # WinoBiasVocabProjector,
-    # trace_winobias_component_specific,
-    # compare_component_contributions,
-    # analyze_mlp_vs_attention_bias,
+    format_winobias_as_mcqa,
+    compare_mlp_vs_attn_patching,
+    trace_winobias_attention_heads,
 )
 from vocab_projection_utils import (
     LlamaVocabProjector,
     analyze_winobias_bias_emergence,
     analyze_winobias_component_comparison,
-    analyze_attention_heads_for_bias,
+    # analyze_attention_heads_for_bias,
 )
 import jsonlines
 import time
@@ -53,8 +51,14 @@ if __name__ == "__main__":
                            "vocab_projection_mlp",       # Fine-grained MLP only
                            "vocab_projection_attn",      # Fine-grained Attention only
                            "vocab_projection_mlp_vs_attn",  # Compare MLP vs Attention
+                           "patching_mlp",
+                           "patching_attn", 
+                           "patching_mlp_vs_attn",
+                           "patching_heads",
                        ],
                        help="Type of analysis to perform")
+    parser.add_argument("--layers_to_trace", type=str, default=None,
+                   help="Comma-separated layer indices for head analysis (e.g., '22,23,24,25')")
     parser.add_argument("--component_type", type=str, default="mlp",
                        choices=["mlp", "attn", "attn_heads"],
                        help="Component type for component-specific tracing")
@@ -104,6 +108,57 @@ if __name__ == "__main__":
                     safety_prompt_key=args.safety_prompt_key,
                     jailbreak_prompt_key=args.jailbreak_prompt_key
                 )
+
+            elif args.analysis_type == "patching_mlp":
+                result = trace_winobias_mcqa_style(
+                    mt=mt,
+                    example=example,
+                    kind="mlp",  # This is the key difference
+                    include_negatives=False,
+                    model_variant=args.model_variant,
+                    safety_prompt_key=args.safety_prompt_key,
+                    jailbreak_prompt_key=args.jailbreak_prompt_key
+                )
+                result["analysis_type"] = "patching_mlp"
+                
+            elif args.analysis_type == "patching_attn":
+                result = trace_winobias_mcqa_style(
+                    mt=mt,
+                    example=example,
+                    kind="attn",  # This is the key difference
+                    include_negatives=False,
+                    model_variant=args.model_variant,
+                    safety_prompt_key=args.safety_prompt_key,
+                    jailbreak_prompt_key=args.jailbreak_prompt_key
+                )
+                result["analysis_type"] = "patching_attn"
+                
+            elif args.analysis_type == "patching_mlp_vs_attn":
+                result = compare_mlp_vs_attn_patching(
+                    mt=mt,
+                    example=example,
+                    model_variant=args.model_variant,
+                    safety_prompt_key=args.safety_prompt_key,
+                    jailbreak_prompt_key=args.jailbreak_prompt_key
+                )
+                result["analysis_type"] = "patching_mlp_vs_attn"
+                
+            elif args.analysis_type == "patching_heads":
+                # Parse layers to trace
+                if args.layers_to_trace:
+                    layers = [int(x) for x in args.layers_to_trace.split(",")]
+                else:
+                    layers = None  # Defaults to last 10 layers
+                
+                result = trace_winobias_attention_heads(
+                    mt=mt,
+                    example=example,
+                    layers_to_trace=layers,
+                    model_variant=args.model_variant,
+                    safety_prompt_key=args.safety_prompt_key,
+                    jailbreak_prompt_key=args.jailbreak_prompt_key
+                )
+                result["analysis_type"] = "patching_heads"
                 
             elif args.analysis_type == "vocab_projection":
                 # Coarse projection (full layer outputs)
@@ -202,6 +257,36 @@ if __name__ == "__main__":
                     print("Skipped:", result["skip_reason"])
                 else:
                     print("Prediction: INCORRECT")
+
+            elif args.analysis_type in ["patching_mlp", "patching_attn"]:
+                component = "MLP" if "mlp" in args.analysis_type else "Attention"
+                print(f"Component: {component}")
+                if result.get("correct_prediction", False):
+                    print("Prediction: CORRECT")
+                else:
+                    print("Prediction: INCORRECT/MIXED")
+                probits_correct = result.get("probits_correct", [])
+                probits_incorrect = result.get("probits_incorrect", [])
+                if probits_correct and probits_incorrect:
+                    diffs = [c - i for c, i in zip(probits_correct, probits_incorrect)]
+                    max_diff = max(diffs)
+                    max_layer = diffs.index(max_diff)
+                    print(f"Max prob diff from {component}: {max_diff:.3f} at layer {max_layer}")
+                    
+            elif args.analysis_type == "patching_mlp_vs_attn":
+                comparison = result.get("comparison", {})
+                print(f"Dominant component: {comparison.get('dominant_component', '?')}")
+                print(f"MLP max effect: {comparison.get('mlp_max_effect', 0):.3f} at layer {comparison.get('mlp_max_effect_layer', '?')}")
+                print(f"Attn max effect: {comparison.get('attn_max_effect', 0):.3f} at layer {comparison.get('attn_max_effect_layer', '?')}")
+                print(f"MLP/Attn ratio: {comparison.get('mlp_to_attn_ratio', 0):.2f}")
+                
+            elif args.analysis_type == "patching_heads":
+                print(f"Layers traced: {result.get('layers_traced', [])}")
+                print(f"Baseline logit diff: {result.get('baseline', {}).get('logit_diff', 0):.3f}")
+                top_heads = result.get("top_heads_per_layer", {})
+                for layer_idx, heads in list(top_heads.items())[:3]:  # Show top 3 layers
+                    top_3 = heads[:3]
+                    print(f"Layer {layer_idx} top heads: {[(h, f'{e:.3f}') for h, e in top_3]}")
                     
             elif args.analysis_type == "vocab_projection":
                 print(f"Entities: {result.get('correct_entity', '?')} vs {result.get('other_entity', '?')}")
@@ -219,7 +304,7 @@ if __name__ == "__main__":
             elif args.analysis_type in ["vocab_projection_mlp", "vocab_projection_attn"]:
                 component = "MLP" if "mlp" in args.analysis_type else "Attention"
                 print(f"Component: {component}")
-                print(f"Entities: {result.get('correct_entity', '?')} vs {result.get('incorrect_entity', '?')}")
+                print(f"Entities: {result.get('correct_entity', '?')} vs {result.get('other_entity', '?')}")
                 pro_logit_diff = result.get("pro_logit_diff", [])
                 if pro_logit_diff:
                     max_diff = max(pro_logit_diff)
@@ -228,112 +313,12 @@ if __name__ == "__main__":
                     
             elif args.analysis_type == "vocab_projection_mlp_vs_attn":
                 comparison = result.get("comparison", {})
-                print(f"Entities: {result.get('correct_entity', '?')} vs {result.get('incorrect_entity', '?')}")
+                mlp_results = result.get("mlp_results", {})
+                print(f"Entities: {mlp_results.get('correct_entity', '?')} vs {mlp_results.get('other_entity', '?')}")
                 print(f"Dominant component: {comparison.get('dominant_component', '?')}")
-                print(f"MLP max bias: {comparison.get('mlp_max_bias', 0):.3f} at layer {comparison.get('mlp_max_bias_layer', '?')}")
-                print(f"Attn max bias: {comparison.get('attn_max_bias', 0):.3f} at layer {comparison.get('attn_max_bias_layer', '?')}")
-                print(f"MLP/Attn ratio: {comparison.get('bias_ratio', 0):.2f}")
-            
-            '''
-            # Choose analysis type
-            if args.analysis_type == "causal_trace":
-                start_time = time.time()
-                result = trace_winobias_mcqa_style(
-                    mt=mt,
-                    example=example,
-                    kind=None,
-                    include_negatives=False,
-                    model_variant=args.model_variant,
-                    safety_prompt_key=args.safety_prompt_key,
-                    jailbreak_prompt_key=args.jailbreak_prompt_key
-                )
-                end_time = time.time()
-                print(f"Causal trace time: {end_time - start_time} seconds")
+                print(f"MLP max bias: {comparison.get('mlp_max_pro_logit_diff', 0):.3f} at layer {comparison.get('mlp_max_effect_layer', '?')}")
+                print(f"Attn max bias: {comparison.get('attn_max_pro_logit_diff', 0):.3f} at layer {comparison.get('attn_max_effect_layer', '?')}")
+                print(f"MLP/Attn ratio: {comparison.get('bias_ratio_mlp_to_attn', 0):.2f}")
 
-                
-            elif args.analysis_type == "vocab_projection":
-                projector = WinoBiasVocabProjector(mt)
-                result = projector.analyze_bias_emergence(
-                    example=example,
-                    model_variant=args.model_variant,
-                    safety_prompt_key=args.safety_prompt_key,
-                    jailbreak_prompt_key=args.jailbreak_prompt_key,
-                    k=args.vocab_k
-                )
-                result["analysis_type"] = "vocab_projection"
-
-
-            elif args.analysis_type == "vocab_projection_paired":
-                projector = WinoBiasVocabProjector(mt)
-                result = projector.analyze_bias_emergence_paired(
-                    example=example,
-                    model_variant=args.model_variant,
-                    safety_prompt_key=args.safety_prompt_key,
-                    jailbreak_prompt_key=args.jailbreak_prompt_key,
-                    k=args.vocab_k
-                )
-                result["analysis_type"] = "vocab_projection_paired"
-
-
-            elif args.analysis_type == "component_trace":
-                result = trace_winobias_component_specific(
-                    mt=mt,
-                    example=example,
-                    component_type=args.component_type,
-                    model_variant=args.model_variant,
-                    safety_prompt_key=args.safety_prompt_key,
-                    jailbreak_prompt_key=args.jailbreak_prompt_key
-                )
-                result["analysis_type"] = "component_trace"
-
-
-            elif args.analysis_type == "mlp_vs_attention":
-                result = analyze_mlp_vs_attention_bias(
-                    mt=mt,
-                    example=example,
-                    model_variants=[args.model_variant]  # Single variant for now
-                )
-                result["analysis_type"] = "mlp_vs_attention"
-            else:
-                raise ValueError(f"Unknown analysis type: {args.analysis_type}")
             
-            
-            writer.write(result)
-
-            if args.analysis_type == "causal_trace":
-                if result.get("correct_prediction", False):
-                    print("Prediction: CORRECT")
-                elif result.get("skip_reason"):
-                    print("Skipped:", result["skip_reason"])
-                else:
-                    print("Prediction: INCORRECT")
-        
-        
-            elif args.analysis_type == "vocab_projection":
-                bias_analysis = result.get("bias_analysis", {})
-                print(f"Bias emergence analysis completed. First bias layer: {bias_analysis.get('male_terms_emergence_first_layer', 'N/A')}")
-            
-            
-            elif args.analysis_type == "vocab_projection_paired":
-                comparison = result.get("paired_comparison", {})
-                bias_ind = comparison.get("bias_indicators", {})
-                print(f"Paired analysis completed:")
-                print(f"  Stereotype type: {comparison.get('example_type', 'N/A')}")
-                print(f"  Stereotypical direction: {comparison.get('stereotypical_direction', 'N/A')}")
-                if "layer_difference" in bias_ind:
-                    print(f"  Layer difference: {bias_ind['layer_difference']}")
-                    print(f"  Stereotypical emerges earlier: {bias_ind.get('stereotypical_emerges_earlier', 'N/A')}")
-                print(f"  Bias strength: {bias_ind.get('bias_strength', 'N/A')}")
-            
-            
-            elif args.analysis_type == "component_trace":
-                comp_analysis = result.get("component_analysis", {})
-                print(f"Component analysis ({args.component_type}): Max bias at layer {comp_analysis.get('max_bias_layer', 'N/A')}")
-            
-            
-            elif args.analysis_type == "mlp_vs_attention":
-                summary = result.get("summary", {})
-                print(f"MLP vs Attention: MLP dominance = {summary.get('consistent_mlp_dominance', False)}")
-
-'''
-    print(f"\nDone! Results saved to {args.output_file}")
+            print(f"\nDone! Results saved to {args.output_file}")
