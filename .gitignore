@@ -8,4 +8,4 @@ temp_results/
 util/visualize.py
 figures/
 run_experiments.py
-experiment plan.pdf
+experiment_plan.pdf
