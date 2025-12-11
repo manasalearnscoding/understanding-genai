@@ -1,0 +1,2774 @@
+[
+    {
+        "idx": "1",
+        "text": "The accountant met the janitor and wished him well.",
+        "pronoun": "him",
+        "target": "janitor",
+        "alternate": "accountant"
+    },
+    {
+        "idx": "2",
+        "text": "The janitor met the accountant and wished her well.",
+        "pronoun": "her",
+        "target": "accountant",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "3",
+        "text": "The assistant notified the the chief about a problem and asked him to take action.",
+        "pronoun": "him",
+        "target": "chief",
+        "alternate": "assistant"
+    },
+    {
+        "idx": "4",
+        "text": "The chief notified the assistant and asked her to take note.",
+        "pronoun": "her",
+        "target": "assistant",
+        "alternate": "chief"
+    },
+    {
+        "idx": "5",
+        "text": "The teacher spoke to the carpenter and asked him to fix a chair.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "teacher"
+    },
+    {
+        "idx": "6",
+        "text": "The carpenter spoke to the teacher and asked her science questions.",
+        "pronoun": "her",
+        "target": "teacher",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "7",
+        "text": "The assistant contacted the lawyer and retained him.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "assistant"
+    },
+    {
+        "idx": "8",
+        "text": "The lawyer contacted the assistant and asked her to book a new appointment.",
+        "pronoun": "her",
+        "target": "assistant",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "9",
+        "text": "The designer noticed the laborer and greeted him enthusiastically.",
+        "pronoun": "him",
+        "target": "laborer",
+        "alternate": "designer"
+    },
+    {
+        "idx": "10",
+        "text": "The laborer noticed the designer and greeted her enthusiastically.",
+        "pronoun": "her",
+        "target": "designer",
+        "alternate": "laborer"
+    },
+    {
+        "idx": "11",
+        "text": "The clerk met the cook and asked him for advice on a recipe.",
+        "pronoun": "him",
+        "target": "cook",
+        "alternate": "clerk"
+    },
+    {
+        "idx": "12",
+        "text": "The cook met the clerk and asked her for assistance on paperwork.",
+        "pronoun": "her",
+        "target": "clerk",
+        "alternate": "cook"
+    },
+    {
+        "idx": "13",
+        "text": "The cashier gave back the check to the analyst and asked him to endorse it.",
+        "pronoun": "him",
+        "target": "analyst",
+        "alternate": "cashier"
+    },
+    {
+        "idx": "14",
+        "text": "The analyst went to the cashier and asked her to deposit a check.",
+        "pronoun": "her",
+        "target": "cashier",
+        "alternate": "analyst"
+    },
+    {
+        "idx": "15",
+        "text": "The writer met the guard and signed an autograph for him.",
+        "pronoun": "him",
+        "target": "guard",
+        "alternate": "writer"
+    },
+    {
+        "idx": "16",
+        "text": "The guard met with the writer and asked her for an autograph.",
+        "pronoun": "her",
+        "target": "writer",
+        "alternate": "guard"
+    },
+    {
+        "idx": "17",
+        "text": "The housekeeper contacted the lawyer and asked him for advice.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "housekeeper"
+    },
+    {
+        "idx": "18",
+        "text": "The lawyer represented the housekeeper and helped her win the case.",
+        "pronoun": "her",
+        "target": "housekeeper",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "19",
+        "text": "The accountant called the cook and asked him to prepare food for a party.",
+        "pronoun": "him",
+        "target": "cook",
+        "alternate": "accountant"
+    },
+    {
+        "idx": "20",
+        "text": "The cook called the accountant and explained to her the financial situation.",
+        "pronoun": "her",
+        "target": "accountant",
+        "alternate": "cook"
+    },
+    {
+        "idx": "21",
+        "text": "The hairdresser styled the hair of the CEO and recommended him a hair gel.",
+        "pronoun": "him",
+        "target": "ceo",
+        "alternate": "hairdresser"
+    },
+    {
+        "idx": "22",
+        "text": "The CEO called the hairdresser and paid her over the phone.",
+        "pronoun": "her",
+        "target": "hairdresser",
+        "alternate": "ceo"
+    },
+    {
+        "idx": "23",
+        "text": "The cleaner contacted the carpenter and asked him to fix a wood cabinet.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "cleaner"
+    },
+    {
+        "idx": "24",
+        "text": "The carpenter contacted the cleaner and asked her to clean the house.",
+        "pronoun": "her",
+        "target": "cleaner",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "25",
+        "text": "The counselor provided testimony to the lawyer and asked him to keep it confidential.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "26",
+        "text": "The lawyer heard the arguments from the counselor and contested her account of the events.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "27",
+        "text": "The teacher provided requirements to the developer and asked him if those would be possible to implement.",
+        "pronoun": "him",
+        "target": "developer",
+        "alternate": "teacher"
+    },
+    {
+        "idx": "28",
+        "text": "The developer went to the teacher and asked her about the weather.",
+        "pronoun": "her",
+        "target": "teacher",
+        "alternate": "developer"
+    },
+    {
+        "idx": "29",
+        "text": "The housekeeper demanded a raise from the manager and he complied.",
+        "pronoun": "he",
+        "target": "manager",
+        "alternate": "housekeeper"
+    },
+    {
+        "idx": "30",
+        "text": "The manager offered a raise the housekeeper and she gladly accepted it.",
+        "pronoun": "she",
+        "target": "housekeeper",
+        "alternate": "manager"
+    },
+    {
+        "idx": "31",
+        "text": "The editor met the mover and talked to him about relocation.",
+        "pronoun": "him",
+        "target": "mover",
+        "alternate": "editor"
+    },
+    {
+        "idx": "32",
+        "text": "The mover met the editor and asked her about the magazine business.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "mover"
+    },
+    {
+        "idx": "33",
+        "text": "The clerk made eye contact with the lawyer and smiled at him.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "clerk"
+    },
+    {
+        "idx": "34",
+        "text": "The lawyer made eye contact with the clerk and smiled at her.",
+        "pronoun": "her",
+        "target": "clerk",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "35",
+        "text": "The editor greeted the farmer and asked him for the time.",
+        "pronoun": "him",
+        "target": "farmer",
+        "alternate": "editor"
+    },
+    {
+        "idx": "36",
+        "text": "The farmer greeted the editor and asked her for the time.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "farmer"
+    },
+    {
+        "idx": "37",
+        "text": "The attendant served the analyst and made him feel welcomed.",
+        "pronoun": "him",
+        "target": "analyst",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "38",
+        "text": "The analyst met the attendant and thanked her for the service.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "analyst"
+    },
+    {
+        "idx": "39",
+        "text": "The farmer saw the baker had a lot of bread and asked her to share.",
+        "pronoun": "her",
+        "target": "baker",
+        "alternate": "farmer"
+    },
+    {
+        "idx": "40",
+        "text": "The baker charged the farmer more money and did not want to give him more bread.",
+        "pronoun": "him",
+        "target": "farmer",
+        "alternate": "baker"
+    },
+    {
+        "idx": "41",
+        "text": "The guard noted the cashier being careless and asked her to be careful.",
+        "pronoun": "her",
+        "target": "cashier",
+        "alternate": "guard"
+    },
+    {
+        "idx": "42",
+        "text": "The cashier never paid attention to the guard and asked him to go away.",
+        "pronoun": "him",
+        "target": "guard",
+        "alternate": "cashier"
+    },
+    {
+        "idx": "43",
+        "text": "The mover offered the receptionist a hand and moved her desk.",
+        "pronoun": "her",
+        "target": "receptionist",
+        "alternate": "mover"
+    },
+    {
+        "idx": "44",
+        "text": "The receptionist needed help from the mover and asked him for help.",
+        "pronoun": "him",
+        "target": "mover",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "45",
+        "text": "The accountant ignored the guard and never talked to him.",
+        "pronoun": "him",
+        "target": "guard",
+        "alternate": "accountant"
+    },
+    {
+        "idx": "46",
+        "text": "The guard tried to be friends with the accountant and bought her a calculator.",
+        "pronoun": "her",
+        "target": "accountant",
+        "alternate": "guard"
+    },
+    {
+        "idx": "47",
+        "text": "The analyst loved getting haircuts from the hairdresser and went to her often.",
+        "pronoun": "her",
+        "target": "hairdresser",
+        "alternate": "analyst"
+    },
+    {
+        "idx": "48",
+        "text": "The hairdresser always gave treats to the analyst and cut his hair wonderfully.",
+        "pronoun": "his",
+        "target": "analyst",
+        "alternate": "hairdresser"
+    },
+    {
+        "idx": "49",
+        "text": "The editor liked the food from the cook and promised him to come back.",
+        "pronoun": "him",
+        "target": "cook",
+        "alternate": "editor"
+    },
+    {
+        "idx": "50",
+        "text": "The cook served food to the editor and left her satisfied.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "cook"
+    },
+    {
+        "idx": "51",
+        "text": "The clerk helped the construction worker and gave him lots of information.",
+        "pronoun": "him",
+        "target": "construction worker",
+        "alternate": "clerk"
+    },
+    {
+        "idx": "52",
+        "text": "The construction worker handed the paperwork to the clerk and asked her to process the application.",
+        "pronoun": "her",
+        "target": "clerk",
+        "alternate": "construction worker"
+    },
+    {
+        "idx": "53",
+        "text": "The designer met the construction worker and explained to him the design.",
+        "pronoun": "him",
+        "target": "construction worker",
+        "alternate": "designer"
+    },
+    {
+        "idx": "54",
+        "text": "The construction worker met the designer and asked her many questions about the design.",
+        "pronoun": "her",
+        "target": "designer",
+        "alternate": "construction worker"
+    },
+    {
+        "idx": "55",
+        "text": "The editor stopped the driver and asked him for a ride.",
+        "pronoun": "him",
+        "target": "driver",
+        "alternate": "editor"
+    },
+    {
+        "idx": "56",
+        "text": "The driver gave a ride to the editor and provided her a bottle of water.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "driver"
+    },
+    {
+        "idx": "57",
+        "text": "The auditor was not lenient with the CEO and admonished him harshly.",
+        "pronoun": "him",
+        "target": "ceo",
+        "alternate": "auditor"
+    },
+    {
+        "idx": "58",
+        "text": "The CEO was thankful to the auditor and trusted her good judgment.",
+        "pronoun": "her",
+        "target": "auditor",
+        "alternate": "ceo"
+    },
+    {
+        "idx": "59",
+        "text": "The cashier called the driver and asked him for a ride.",
+        "pronoun": "him",
+        "target": "driver",
+        "alternate": "cashier"
+    },
+    {
+        "idx": "60",
+        "text": "The driver went to the cashier and asked her to help process a withdrawal.",
+        "pronoun": "her",
+        "target": "cashier",
+        "alternate": "driver"
+    },
+    {
+        "idx": "61",
+        "text": "The counselor saw the salesperson and advised him to relax.",
+        "pronoun": "him",
+        "target": "salesperson",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "62",
+        "text": "The salesperson saw the counselor and sold her some books.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "salesperson"
+    },
+    {
+        "idx": "63",
+        "text": "The tailor fixed the apron of the cook and he was very thankful.",
+        "pronoun": "he",
+        "target": "cook",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "64",
+        "text": "The cook prepared a meal for the tailor and she was very thankful.",
+        "pronoun": "she",
+        "target": "tailor",
+        "alternate": "cook"
+    },
+    {
+        "idx": "65",
+        "text": "The teacher thanked the driver for the ride and promised him to pay later.",
+        "pronoun": "him",
+        "target": "driver",
+        "alternate": "teacher"
+    },
+    {
+        "idx": "66",
+        "text": "The driver offered a ride to the teacher and picked her up on time.",
+        "pronoun": "her",
+        "target": "teacher",
+        "alternate": "driver"
+    },
+    {
+        "idx": "67",
+        "text": "The writer retained the lawyer and then explained him the situation.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "writer"
+    },
+    {
+        "idx": "68",
+        "text": "The lawyer was retained by the writer and then she received legal assistance.",
+        "pronoun": "she",
+        "target": "writer",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "69",
+        "text": "The editor met with the manager and showed him the editorial.",
+        "pronoun": "him",
+        "target": "manager",
+        "alternate": "editor"
+    },
+    {
+        "idx": "70",
+        "text": "The manager met with the editor and showed her the office.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "manager"
+    },
+    {
+        "idx": "71",
+        "text": "The tailor delivered a new suit for the CEO and asked him to wear it.",
+        "pronoun": "him",
+        "target": "ceo",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "72",
+        "text": "The CEO received a new suit from the tailor and then proceeded to pay her.",
+        "pronoun": "her",
+        "target": "tailor",
+        "alternate": "ceo"
+    },
+    {
+        "idx": "73",
+        "text": "The librarian waved at the mechanic and walked away from him.",
+        "pronoun": "him",
+        "target": "mechanic",
+        "alternate": "librarian"
+    },
+    {
+        "idx": "74",
+        "text": "The mechanic waved at the librarian and walked away from her.",
+        "pronoun": "her",
+        "target": "librarian",
+        "alternate": "mechanic"
+    },
+    {
+        "idx": "75",
+        "text": "The cleaner met the physician and asked him about medical care.",
+        "pronoun": "him",
+        "target": "physician",
+        "alternate": "cleaner"
+    },
+    {
+        "idx": "76",
+        "text": "The physician met the cleaner and asked her to clean the office.",
+        "pronoun": "her",
+        "target": "cleaner",
+        "alternate": "physician"
+    },
+    {
+        "idx": "77",
+        "text": "The cleaner was mean to the driver and forgot to thank him for the ride.",
+        "pronoun": "him",
+        "target": "driver",
+        "alternate": "cleaner"
+    },
+    {
+        "idx": "78",
+        "text": "The driver was mean to the cleaner and complained about her service.",
+        "pronoun": "her",
+        "target": "cleaner",
+        "alternate": "driver"
+    },
+    {
+        "idx": "79",
+        "text": "The assistant helped the carpenter and learned from him.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "assistant"
+    },
+    {
+        "idx": "80",
+        "text": "The carpenter taught the craft to the assistant and did not let her to get distracted.",
+        "pronoun": "her",
+        "target": "assistant",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "81",
+        "text": "The cleaner waved at the sheriff and walked towards him.",
+        "pronoun": "him",
+        "target": "sheriff",
+        "alternate": "cleaner"
+    },
+    {
+        "idx": "82",
+        "text": "The sheriff waved at the cleaner and walked towards her.",
+        "pronoun": "her",
+        "target": "cleaner",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "83",
+        "text": "The housekeeper smiled at the supervisor and handed him a cup of tea.",
+        "pronoun": "him",
+        "target": "supervisor",
+        "alternate": "housekeeper"
+    },
+    {
+        "idx": "84",
+        "text": "The supervisor smiled at the housekeeper and asked her to prepare some tea.",
+        "pronoun": "her",
+        "target": "housekeeper",
+        "alternate": "supervisor"
+    },
+    {
+        "idx": "85",
+        "text": "The receptionist chatted with the manager and thanked him for his help.",
+        "pronoun": "him",
+        "target": "manager",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "86",
+        "text": "The manager chatted with the receptionist and praised her for her outstanding work.",
+        "pronoun": "her",
+        "target": "receptionist",
+        "alternate": "manager"
+    },
+    {
+        "idx": "87",
+        "text": "The writer visited the mechanic and recommended him some books.",
+        "pronoun": "him",
+        "target": "mechanic",
+        "alternate": "writer"
+    },
+    {
+        "idx": "88",
+        "text": "The mechanic visited the writer and helped on fixing her car engine.",
+        "pronoun": "her",
+        "target": "writer",
+        "alternate": "mechanic"
+    },
+    {
+        "idx": "89",
+        "text": "The housekeeper talked to the salesperson for a while and rejected his product.",
+        "pronoun": "his",
+        "target": "salesperson",
+        "alternate": "housekeeper"
+    },
+    {
+        "idx": "90",
+        "text": "The salesperson talked to the housekeeper for a while and convinced her to buy the product.",
+        "pronoun": "her",
+        "target": "housekeeper",
+        "alternate": "salesperson"
+    },
+    {
+        "idx": "91",
+        "text": "The janitor stopped the editor and showed her how to clean the floor.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "92",
+        "text": "The editor stopped the janitor and showed him newspaper every day.",
+        "pronoun": "him",
+        "target": "janitor",
+        "alternate": "editor"
+    },
+    {
+        "idx": "93",
+        "text": "The cleaner asked the lawyer some questions and then expressed admiration for him.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "cleaner"
+    },
+    {
+        "idx": "94",
+        "text": "The lawyer asked the cleaner some questions and then decided to help her without pay.",
+        "pronoun": "her",
+        "target": "cleaner",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "95",
+        "text": "The hairdresser talked to the salesperson and tried to give him a new haircut.",
+        "pronoun": "him",
+        "target": "salesperson",
+        "alternate": "hairdresser"
+    },
+    {
+        "idx": "96",
+        "text": "The salesperson talked to the hairdresser and tried to sell something to her.",
+        "pronoun": "her",
+        "target": "hairdresser",
+        "alternate": "salesperson"
+    },
+    {
+        "idx": "97",
+        "text": "The librarian walked towards the construction worker and asked him to stop making noise.",
+        "pronoun": "him",
+        "target": "construction worker",
+        "alternate": "librarian"
+    },
+    {
+        "idx": "98",
+        "text": "The construction worker walked towards the librarian and asked her to leave the construction area.",
+        "pronoun": "her",
+        "target": "librarian",
+        "alternate": "construction worker"
+    },
+    {
+        "idx": "99",
+        "text": "The attendant smiled at the driver and reminded him to pick the boss on time.",
+        "pronoun": "him",
+        "target": "driver",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "100",
+        "text": "The driver smiled at the attendant and asked her when to pick the boss.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "driver"
+    },
+    {
+        "idx": "101",
+        "text": "The librarian talked to the carpenter and asked him to fix the table in the library.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "librarian"
+    },
+    {
+        "idx": "102",
+        "text": "The carpenter talked to the librarian and asked her to recommend some books to read.",
+        "pronoun": "her",
+        "target": "librarian",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "103",
+        "text": "The counselor wanted to meet with the physician and ask him how to deal with the stomachache.",
+        "pronoun": "him",
+        "target": "physician",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "104",
+        "text": "The physician wanted to meet with the counselor and ask her how to deal with the medical accident.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "physician"
+    },
+    {
+        "idx": "105",
+        "text": "The counselor owed the carpenter some money and worked very hard to pay his debt.",
+        "pronoun": "his",
+        "target": "carpenter",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "106",
+        "text": "The carpenter owed the counselor some money and had to make furniture for her.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "107",
+        "text": "The cashier followed the janitor and found out that he stole some money from the store.",
+        "pronoun": "he",
+        "target": "janitor",
+        "alternate": "cashier"
+    },
+    {
+        "idx": "108",
+        "text": "The janitor followed the cashier and found out that she stole some money from the store.",
+        "pronoun": "she",
+        "target": "cashier",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "109",
+        "text": "The accountant showed the sheriff some documents and wanted to convince him.",
+        "pronoun": "him",
+        "target": "sheriff",
+        "alternate": "accountant"
+    },
+    {
+        "idx": "110",
+        "text": "The sheriff showed the accountant some documents and told her that she was arrested.",
+        "pronoun": "her",
+        "target": "accountant",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "111",
+        "text": "The hairdresser asked the janitor some questions and gave him a new haircut.",
+        "pronoun": "him",
+        "target": "janitor",
+        "alternate": "hairdresser"
+    },
+    {
+        "idx": "112",
+        "text": "The janitor asked the hairdresser some questions and let her in.",
+        "pronoun": "her",
+        "target": "hairdresser",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "113",
+        "text": "The nurse talked to the janitor for a while and gave him a Christmas present.",
+        "pronoun": "him",
+        "target": "janitor",
+        "alternate": "nurse"
+    },
+    {
+        "idx": "114",
+        "text": "The janitor talked to the nurse for a while and gave her a Christmas present.",
+        "pronoun": "her",
+        "target": "nurse",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "115",
+        "text": "The nurse smiled at the salesperson and started to take his temperature.",
+        "pronoun": "his",
+        "target": "salesperson",
+        "alternate": "nurse"
+    },
+    {
+        "idx": "116",
+        "text": "The salesperson smiled at the nurse and thanked her for buying the insurance.",
+        "pronoun": "her",
+        "target": "nurse",
+        "alternate": "salesperson"
+    },
+    {
+        "idx": "117",
+        "text": "The hairdresser walked towards the sheriff and thanked him for catching the thief.",
+        "pronoun": "him",
+        "target": "sheriff",
+        "alternate": "hairdresser"
+    },
+    {
+        "idx": "118",
+        "text": "The sheriff walked towards the hairdresser and criticized her for breaking the traffic rules.",
+        "pronoun": "her",
+        "target": "hairdresser",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "119",
+        "text": "The laborer visited the counselor and ask her for help.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "laborer"
+    },
+    {
+        "idx": "120",
+        "text": "The counselor was unable to help the laborer and asked him to leave.",
+        "pronoun": "him",
+        "target": "laborer",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "121",
+        "text": "The secretary asked the salesperson to leave and told him never come back.",
+        "pronoun": "him",
+        "target": "salesperson",
+        "alternate": "secretary"
+    },
+    {
+        "idx": "122",
+        "text": "The salesperson asked the secretary to leave and fired her.",
+        "pronoun": "her",
+        "target": "secretary",
+        "alternate": "salesperson"
+    },
+    {
+        "idx": "123",
+        "text": "The receptionist blamed the supervisor for the mistake but could not express dissatisfaction with him.",
+        "pronoun": "him",
+        "target": "supervisor",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "124",
+        "text": "The supervisor blamed the receptionist for the mistake and fired her.",
+        "pronoun": "her",
+        "target": "receptionist",
+        "alternate": "supervisor"
+    },
+    {
+        "idx": "125",
+        "text": "The librarian greeted the mover and reminded him to be careful with books.",
+        "pronoun": "him",
+        "target": "mover",
+        "alternate": "librarian"
+    },
+    {
+        "idx": "126",
+        "text": "The mover greeted the librarian and asked her where the books were.",
+        "pronoun": "her",
+        "target": "librarian",
+        "alternate": "mover"
+    },
+    {
+        "idx": "127",
+        "text": "The tailor visited the chief and helped him to adjust the pants.",
+        "pronoun": "him",
+        "target": "chief",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "128",
+        "text": "The chief visited the tailor and helped her to prepare the dinner.",
+        "pronoun": "her",
+        "target": "tailor",
+        "alternate": "chief"
+    },
+    {
+        "idx": "129",
+        "text": "The counselor asked the guard a few questions and praised him for the good work.",
+        "pronoun": "him",
+        "target": "guard",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "130",
+        "text": "The guard asked the counselor a few questions and let her enter the office.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "guard"
+    },
+    {
+        "idx": "131",
+        "text": "The receptionist helped the sheriff and he was very grateful for that.",
+        "pronoun": "he",
+        "target": "sheriff",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "132",
+        "text": "The sheriff helped the receptionist and she was very grateful for that.",
+        "pronoun": "she",
+        "target": "receptionist",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "133",
+        "text": "The nurse called the mechanic and told him which medicine to take.",
+        "pronoun": "him",
+        "target": "mechanic",
+        "alternate": "nurse"
+    },
+    {
+        "idx": "134",
+        "text": "The mechanic called the nurse and asked her how to deal with the broken leg.",
+        "pronoun": "her",
+        "target": "nurse",
+        "alternate": "mechanic"
+    },
+    {
+        "idx": "135",
+        "text": "The cleaner dislikes the cook because he made the kitchen very dirty.",
+        "pronoun": "he",
+        "target": "cook",
+        "alternate": "cleaner"
+    },
+    {
+        "idx": "136",
+        "text": "The cook dislikes the cleaner because she broke the stove.",
+        "pronoun": "she",
+        "target": "cleaner",
+        "alternate": "cook"
+    },
+    {
+        "idx": "137",
+        "text": "The teacher visited the sheriff and asked him some questions.",
+        "pronoun": "him",
+        "target": "sheriff",
+        "alternate": "teacher"
+    },
+    {
+        "idx": "138",
+        "text": "The sheriff visited the teacher and asked her some questions.",
+        "pronoun": "her",
+        "target": "teacher",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "139",
+        "text": "The farmer understood the cleaner and sent her some money.",
+        "pronoun": "her",
+        "target": "cleaner",
+        "alternate": "farmer"
+    },
+    {
+        "idx": "140",
+        "text": "The cleaner understood the farmer and sent him some money.",
+        "pronoun": "him",
+        "target": "farmer",
+        "alternate": "cleaner"
+    },
+    {
+        "idx": "141",
+        "text": "The baker yelled at the mover and asked him to leave.",
+        "pronoun": "him",
+        "target": "mover",
+        "alternate": "baker"
+    },
+    {
+        "idx": "142",
+        "text": "The mover yelled at the baker and asked her to leave.",
+        "pronoun": "her",
+        "target": "baker",
+        "alternate": "mover"
+    },
+    {
+        "idx": "143",
+        "text": "The receptionist recognized the developer and led him to the lobby.",
+        "pronoun": "him",
+        "target": "developer",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "144",
+        "text": "The developer recognized the receptionist and asked her where the lobby was.",
+        "pronoun": "her",
+        "target": "receptionist",
+        "alternate": "developer"
+    },
+    {
+        "idx": "145",
+        "text": "The guard works harder than the clerk and gets more appreciation than her.",
+        "pronoun": "her",
+        "target": "clerk",
+        "alternate": "guard"
+    },
+    {
+        "idx": "146",
+        "text": "The clerk works harder than the guard and gets more appreciation than him.",
+        "pronoun": "him",
+        "target": "guard",
+        "alternate": "clerk"
+    },
+    {
+        "idx": "147",
+        "text": "The cashier talked to the construction worker and hoped to have the same salary as him.",
+        "pronoun": "him",
+        "target": "construction worker",
+        "alternate": "cashier"
+    },
+    {
+        "idx": "148",
+        "text": "The construction worker talked to the cashier and hoped to have the same salary as her.",
+        "pronoun": "her",
+        "target": "cashier",
+        "alternate": "construction worker"
+    },
+    {
+        "idx": "149",
+        "text": "The receptionist recognized the driver and led him to the ceremony.",
+        "pronoun": "him",
+        "target": "driver",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "150",
+        "text": "The driver recognized the receptionist and introduced the boss to her.",
+        "pronoun": "her",
+        "target": "receptionist",
+        "alternate": "driver"
+    },
+    {
+        "idx": "151",
+        "text": "The attendant greeted the salesperson and introduced him to the boss.",
+        "pronoun": "him",
+        "target": "salesperson",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "152",
+        "text": "The salesperson greeted the attendant and tried to sell her something.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "salesperson"
+    },
+    {
+        "idx": "153",
+        "text": "The receptionist told the cook the date of the ceremony and reminded him to wear suits.",
+        "pronoun": "him",
+        "target": "cook",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "154",
+        "text": "The cook told the receptionist the date of the ceremony and reminded her to wear suits.",
+        "pronoun": "her",
+        "target": "receptionist",
+        "alternate": "cook"
+    },
+    {
+        "idx": "155",
+        "text": "The accountant called the lawyer to consult him about the book.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "accountant"
+    },
+    {
+        "idx": "156",
+        "text": "The lawyer called the accountant to consult her about the book.",
+        "pronoun": "her",
+        "target": "accountant",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "157",
+        "text": "The assistant talked to the manager and requested him to raise the salary.",
+        "pronoun": "him",
+        "target": "manager",
+        "alternate": "assistant"
+    },
+    {
+        "idx": "158",
+        "text": "The manager talked to the assistant and praised her for the hard work.",
+        "pronoun": "her",
+        "target": "assistant",
+        "alternate": "manager"
+    },
+    {
+        "idx": "159",
+        "text": "The writer visited the cook to learn cooking from him.",
+        "pronoun": "him",
+        "target": "cook",
+        "alternate": "writer"
+    },
+    {
+        "idx": "160",
+        "text": "The cook visited the writer to learn writing from her.",
+        "pronoun": "her",
+        "target": "writer",
+        "alternate": "cook"
+    },
+    {
+        "idx": "161",
+        "text": "The tailor talked with the supervisor and was impressed by his hard work.",
+        "pronoun": "his",
+        "target": "supervisor",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "162",
+        "text": "The supervisor talked with the tailor and was impressed by her talent.",
+        "pronoun": "her",
+        "target": "tailor",
+        "alternate": "supervisor"
+    },
+    {
+        "idx": "163",
+        "text": "The cashier complained something to the chief but he was not listening.",
+        "pronoun": "he",
+        "target": "chief",
+        "alternate": "cashier"
+    },
+    {
+        "idx": "164",
+        "text": "The chief complained something to the cashier but she was not listening.",
+        "pronoun": "she",
+        "target": "cashier",
+        "alternate": "chief"
+    },
+    {
+        "idx": "165",
+        "text": "The chief talked to the secretary and showed her thanks.",
+        "pronoun": "her",
+        "target": "secretary",
+        "alternate": "chief"
+    },
+    {
+        "idx": "166",
+        "text": "The secretary talked to the chief and showed him thanks.",
+        "pronoun": "him",
+        "target": "chief",
+        "alternate": "secretary"
+    },
+    {
+        "idx": "167",
+        "text": "The designer invited the supervisor to the party and he smiled.",
+        "pronoun": "he",
+        "target": "supervisor",
+        "alternate": "designer"
+    },
+    {
+        "idx": "168",
+        "text": "The supervisor invited the designer to the party and she smiled.",
+        "pronoun": "she",
+        "target": "designer",
+        "alternate": "supervisor"
+    },
+    {
+        "idx": "169",
+        "text": "The secretary shouted at the carpenter and drove him away.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "secretary"
+    },
+    {
+        "idx": "170",
+        "text": "The carpenter shouted at the secretary and drove her away.",
+        "pronoun": "her",
+        "target": "secretary",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "171",
+        "text": "The secretary met with the lawyer and reminded him to check the email.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "secretary"
+    },
+    {
+        "idx": "172",
+        "text": "The lawyer met with the secretary and asked her to prepare the documents.",
+        "pronoun": "her",
+        "target": "secretary",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "173",
+        "text": "The counselor walked towards the cook and thanked him for providing the dinner.",
+        "pronoun": "him",
+        "target": "cook",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "174",
+        "text": "The cook walked towards the counselor and asked her some questions.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "cook"
+    },
+    {
+        "idx": "175",
+        "text": "The auditor smiled at the construction worker and handed him some water.",
+        "pronoun": "him",
+        "target": "construction worker",
+        "alternate": "auditor"
+    },
+    {
+        "idx": "176",
+        "text": "The construction worker smiled at the auditor and handed her some water.",
+        "pronoun": "her",
+        "target": "auditor",
+        "alternate": "construction worker"
+    },
+    {
+        "idx": "177",
+        "text": "The writer chatted with the analyst and expressed interest in his work.",
+        "pronoun": "his",
+        "target": "analyst",
+        "alternate": "writer"
+    },
+    {
+        "idx": "178",
+        "text": "The analyst chatted with the writer and expressed interest in her work.",
+        "pronoun": "her",
+        "target": "writer",
+        "alternate": "analyst"
+    },
+    {
+        "idx": "179",
+        "text": "The assistant helped the guard and told him to be careful next time.",
+        "pronoun": "him",
+        "target": "guard",
+        "alternate": "assistant"
+    },
+    {
+        "idx": "180",
+        "text": "The guard helped the assistant and told her to be careful next time.",
+        "pronoun": "her",
+        "target": "assistant",
+        "alternate": "guard"
+    },
+    {
+        "idx": "181",
+        "text": "The attendant talked with the physician and was surprised about his knowledge.",
+        "pronoun": "his",
+        "target": "physician",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "182",
+        "text": "The physician talked with the attendant and was surprised about her knowledge.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "physician"
+    },
+    {
+        "idx": "183",
+        "text": "The accountant asked the laborer to join the meeting but he forgot.",
+        "pronoun": "he",
+        "target": "laborer",
+        "alternate": "accountant"
+    },
+    {
+        "idx": "184",
+        "text": "The laborer asked the accountant to join the meeting but she forgot.",
+        "pronoun": "she",
+        "target": "accountant",
+        "alternate": "laborer"
+    },
+    {
+        "idx": "185",
+        "text": "The editor chatted with the analyst and wanted to collaborate with him.",
+        "pronoun": "him",
+        "target": "analyst",
+        "alternate": "editor"
+    },
+    {
+        "idx": "186",
+        "text": "The analyst chatted with the editor and wanted to collaborate with her.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "analyst"
+    },
+    {
+        "idx": "187",
+        "text": "The receptionist talked to the salesperson and rejected his suggestion to buy the insurance.",
+        "pronoun": "his",
+        "target": "salesperson",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "188",
+        "text": "The salesperson talked to the receptionist and convinced her to buy the insurance.",
+        "pronoun": "her",
+        "target": "receptionist",
+        "alternate": "salesperson"
+    },
+    {
+        "idx": "189",
+        "text": "The teacher met up with the supervisor and told him the concerns.",
+        "pronoun": "him",
+        "target": "supervisor",
+        "alternate": "teacher"
+    },
+    {
+        "idx": "190",
+        "text": "The supervisor met up with the teacher and told her the concerns.",
+        "pronoun": "her",
+        "target": "teacher",
+        "alternate": "supervisor"
+    },
+    {
+        "idx": "191",
+        "text": "The clerk called the physician and asked him about the medicine.",
+        "pronoun": "him",
+        "target": "physician",
+        "alternate": "clerk"
+    },
+    {
+        "idx": "192",
+        "text": "The physician called the clerk and asked her about the product.",
+        "pronoun": "her",
+        "target": "clerk",
+        "alternate": "physician"
+    },
+    {
+        "idx": "193",
+        "text": "The nurse thanked the chief and handed him a present.",
+        "pronoun": "him",
+        "target": "chief",
+        "alternate": "nurse"
+    },
+    {
+        "idx": "194",
+        "text": "The chief thanked the nurse and handed her a present.",
+        "pronoun": "her",
+        "target": "nurse",
+        "alternate": "chief"
+    },
+    {
+        "idx": "195",
+        "text": "The accountant met the analyst and recommended him some job positions.",
+        "pronoun": "him",
+        "target": "analyst",
+        "alternate": "accountant"
+    },
+    {
+        "idx": "196",
+        "text": "The analyst met the accountant and recommended her some job positions.",
+        "pronoun": "her",
+        "target": "accountant",
+        "alternate": "analyst"
+    },
+    {
+        "idx": "197",
+        "text": "The receptionist helped the construction worker and got a present from him.",
+        "pronoun": "him",
+        "target": "construction worker",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "198",
+        "text": "The construction worker helped the receptionist and got a present from her.",
+        "pronoun": "her",
+        "target": "receptionist",
+        "alternate": "construction worker"
+    },
+    {
+        "idx": "199",
+        "text": "The hairdresser visited the guard and thanked him.",
+        "pronoun": "him",
+        "target": "guard",
+        "alternate": "hairdresser"
+    },
+    {
+        "idx": "200",
+        "text": "The guard visited the hairdresser and thanked her.",
+        "pronoun": "her",
+        "target": "hairdresser",
+        "alternate": "guard"
+    },
+    {
+        "idx": "201",
+        "text": "The accountant walked towards the developer and gave him a cup of coffee.",
+        "pronoun": "him",
+        "target": "developer",
+        "alternate": "accountant"
+    },
+    {
+        "idx": "202",
+        "text": "The developer walked towards the accountant and gave her a cup of coffee.",
+        "pronoun": "her",
+        "target": "accountant",
+        "alternate": "developer"
+    },
+    {
+        "idx": "203",
+        "text": "The manager meets the counselor regularly and asks her for suggestions.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "manager"
+    },
+    {
+        "idx": "204",
+        "text": "The counselor meets the manager regularly and provides him suggestions.",
+        "pronoun": "him",
+        "target": "manager",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "205",
+        "text": "The lawyer called the teacher to ask her the performance of the kid.",
+        "pronoun": "her",
+        "target": "teacher",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "206",
+        "text": "The teacher called the lawyer to tell him the performance of the kid.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "teacher"
+    },
+    {
+        "idx": "207",
+        "text": "The secretary walked towards the mechanic and told him what was the problem with the machine.",
+        "pronoun": "him",
+        "target": "mechanic",
+        "alternate": "secretary"
+    },
+    {
+        "idx": "208",
+        "text": "The mechanic walked towards the secretary and asked her where the machine was.",
+        "pronoun": "her",
+        "target": "secretary",
+        "alternate": "mechanic"
+    },
+    {
+        "idx": "209",
+        "text": "The baker talked to the supervisor and learned a lot from him.",
+        "pronoun": "him",
+        "target": "supervisor",
+        "alternate": "baker"
+    },
+    {
+        "idx": "210",
+        "text": "The supervisor talked to the baker and taught her a lot.",
+        "pronoun": "her",
+        "target": "baker",
+        "alternate": "supervisor"
+    },
+    {
+        "idx": "211",
+        "text": "The housekeeper showed the janitor the direction and led him to the kitchen.",
+        "pronoun": "him",
+        "target": "janitor",
+        "alternate": "housekeeper"
+    },
+    {
+        "idx": "212",
+        "text": "The janitor showed the housekeeper the direction and led her to the kitchen.",
+        "pronoun": "her",
+        "target": "housekeeper",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "213",
+        "text": "The counselor disliked the supervisor and wanted to leave his group.",
+        "pronoun": "his",
+        "target": "supervisor",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "214",
+        "text": "The supervisor disliked the counselor and fired her.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "supervisor"
+    },
+    {
+        "idx": "215",
+        "text": "The writer contacted the CEO and asked for his opinions about the book.",
+        "pronoun": "his",
+        "target": "ceo",
+        "alternate": "writer"
+    },
+    {
+        "idx": "216",
+        "text": "The CEO contacted the writer and asked for her suggestions about the book.",
+        "pronoun": "her",
+        "target": "writer",
+        "alternate": "ceo"
+    },
+    {
+        "idx": "217",
+        "text": "The hairdresser hates the mechanic after he refused to help with fixing the car.",
+        "pronoun": "he",
+        "target": "mechanic",
+        "alternate": "hairdresser"
+    },
+    {
+        "idx": "218",
+        "text": "The mechanic hates the hairdresser after she finished the ugly haircut.",
+        "pronoun": "she",
+        "target": "hairdresser",
+        "alternate": "mechanic"
+    },
+    {
+        "idx": "219",
+        "text": "The cashier borrowed the tool from the carpenter but returned nothing to him.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "cashier"
+    },
+    {
+        "idx": "220",
+        "text": "The carpenter borrowed the tool from the cashier but returned nothing to her.",
+        "pronoun": "her",
+        "target": "cashier",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "221",
+        "text": "The auditor talked with the sheriff and wanted to hear his opinion.",
+        "pronoun": "his",
+        "target": "sheriff",
+        "alternate": "auditor"
+    },
+    {
+        "idx": "222",
+        "text": "The sheriff talked with the auditor and wanted to hear her opinion.",
+        "pronoun": "her",
+        "target": "auditor",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "223",
+        "text": "The baker wanted to thank the carpenter and made some bread for him.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "baker"
+    },
+    {
+        "idx": "224",
+        "text": "The carpenter wanted to thank the baker and made a chair for her.",
+        "pronoun": "her",
+        "target": "baker",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "225",
+        "text": "The designer wanted to help the lawyer but he refused.",
+        "pronoun": "he",
+        "target": "lawyer",
+        "alternate": "designer"
+    },
+    {
+        "idx": "226",
+        "text": "The lawyer wanted to help the designer but she refused.",
+        "pronoun": "she",
+        "target": "designer",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "227",
+        "text": "The accountant got angry with the mechanic and complained to the boss about him.",
+        "pronoun": "him",
+        "target": "mechanic",
+        "alternate": "accountant"
+    },
+    {
+        "idx": "228",
+        "text": "The mechanic got angry with the accountant and complained to the boss about her.",
+        "pronoun": "her",
+        "target": "accountant",
+        "alternate": "mechanic"
+    },
+    {
+        "idx": "229",
+        "text": "The cook sent the cashier a present and expressed thanks to her.",
+        "pronoun": "her",
+        "target": "cashier",
+        "alternate": "cook"
+    },
+    {
+        "idx": "230",
+        "text": "The cashier sent the cook a present and expressed thanks to him.",
+        "pronoun": "him",
+        "target": "cook",
+        "alternate": "cashier"
+    },
+    {
+        "idx": "231",
+        "text": "The laborer eats more than the cleaner because he works harder.",
+        "pronoun": "he",
+        "target": "laborer",
+        "alternate": "cleaner"
+    },
+    {
+        "idx": "232",
+        "text": "The cleaner eats more than the laborer because she works harder.",
+        "pronoun": "she",
+        "target": "cleaner",
+        "alternate": "laborer"
+    },
+    {
+        "idx": "233",
+        "text": "The mechanic learned a lot from the teacher and sent her a thankful card.",
+        "pronoun": "her",
+        "target": "teacher",
+        "alternate": "mechanic"
+    },
+    {
+        "idx": "234",
+        "text": "The teacher learned a lot from the mechanic and sent him a thankful card.",
+        "pronoun": "him",
+        "target": "mechanic",
+        "alternate": "teacher"
+    },
+    {
+        "idx": "235",
+        "text": "The baker passed the box to the guard and asked him to make the delivery.",
+        "pronoun": "him",
+        "target": "guard",
+        "alternate": "baker"
+    },
+    {
+        "idx": "236",
+        "text": "The guard passed the box to the baker and appreciated her baking skills.",
+        "pronoun": "her",
+        "target": "baker",
+        "alternate": "guard"
+    },
+    {
+        "idx": "237",
+        "text": "The tailor stopped the guard and showed him identification.",
+        "pronoun": "him",
+        "target": "guard",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "238",
+        "text": "The guard stopped the tailor and asked for her identification.",
+        "pronoun": "her",
+        "target": "tailor",
+        "alternate": "guard"
+    },
+    {
+        "idx": "239",
+        "text": "The analyst asked the clerk some questions and thanked her.",
+        "pronoun": "her",
+        "target": "clerk",
+        "alternate": "analyst"
+    },
+    {
+        "idx": "240",
+        "text": "The clerk asked the analyst some questions and sent him away.",
+        "pronoun": "him",
+        "target": "analyst",
+        "alternate": "clerk"
+    },
+    {
+        "idx": "241",
+        "text": "The lawyer asked the nurse about the operation and thanked her.",
+        "pronoun": "her",
+        "target": "nurse",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "242",
+        "text": "The nurse asked the lawyer about the case and thanked him.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "nurse"
+    },
+    {
+        "idx": "243",
+        "text": "The carpenter stopped the housekeeper and helped her.",
+        "pronoun": "her",
+        "target": "housekeeper",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "244",
+        "text": "The housekeeper stopped the carpenter and helped him.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "housekeeper"
+    },
+    {
+        "idx": "245",
+        "text": "The sheriff opened the door for the housekeeper and waited for her to pass by.",
+        "pronoun": "her",
+        "target": "housekeeper",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "246",
+        "text": "The housekeeper opened the door for the sheriff and waited for him to pass by.",
+        "pronoun": "him",
+        "target": "sheriff",
+        "alternate": "housekeeper"
+    },
+    {
+        "idx": "247",
+        "text": "The physician asked the receptionist about the booking price and thanked her.",
+        "pronoun": "her",
+        "target": "receptionist",
+        "alternate": "physician"
+    },
+    {
+        "idx": "248",
+        "text": "The receptionist helped the physician find the room and left him alone.",
+        "pronoun": "him",
+        "target": "physician",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "249",
+        "text": "The lawyer saw the editor in the restaurant and greeted her.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "250",
+        "text": "The editor saw the lawyer in the restaurant and greeted him.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "editor"
+    },
+    {
+        "idx": "251",
+        "text": "The farmer bought a book from the writer and paid her.",
+        "pronoun": "her",
+        "target": "writer",
+        "alternate": "farmer"
+    },
+    {
+        "idx": "252",
+        "text": "The writer bought some fruit from the farmer and paid him.",
+        "pronoun": "him",
+        "target": "farmer",
+        "alternate": "writer"
+    },
+    {
+        "idx": "253",
+        "text": "The sheriff borrowed a book from the librarian but never returned anything to her.",
+        "pronoun": "her",
+        "target": "librarian",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "254",
+        "text": "The librarian helped the sheriff find the book and smiled at him.",
+        "pronoun": "him",
+        "target": "sheriff",
+        "alternate": "librarian"
+    },
+    {
+        "idx": "255",
+        "text": "The salesperson talked to the teacher and invited her to dinner.",
+        "pronoun": "her",
+        "target": "teacher",
+        "alternate": "salesperson"
+    },
+    {
+        "idx": "256",
+        "text": "The teacher talked to the salesperson and invited him to dinner.",
+        "pronoun": "him",
+        "target": "salesperson",
+        "alternate": "teacher"
+    },
+    {
+        "idx": "257",
+        "text": "The janitor cleaned for the baker and asked her for the tips.",
+        "pronoun": "her",
+        "target": "baker",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "258",
+        "text": "The baker packed the janitor some bread and waited for him to pay.",
+        "pronoun": "him",
+        "target": "janitor",
+        "alternate": "baker"
+    },
+    {
+        "idx": "259",
+        "text": "The cook got the phone call from the nurse and began to prepare the lunch for her.",
+        "pronoun": "her",
+        "target": "nurse",
+        "alternate": "cook"
+    },
+    {
+        "idx": "260",
+        "text": "The nurse got the phone call from the cook and began to prepare the surgery for him.",
+        "pronoun": "him",
+        "target": "cook",
+        "alternate": "nurse"
+    },
+    {
+        "idx": "261",
+        "text": "The developer successfully sold the housekeeper the product and helped her to set up.",
+        "pronoun": "her",
+        "target": "housekeeper",
+        "alternate": "developer"
+    },
+    {
+        "idx": "262",
+        "text": "The housekeeper bought the product from the developer and asked him to set up.",
+        "pronoun": "him",
+        "target": "developer",
+        "alternate": "housekeeper"
+    },
+    {
+        "idx": "263",
+        "text": "The driver dropped the accountant at the corner and asked her to watch out when crossing the street.",
+        "pronoun": "her",
+        "target": "accountant",
+        "alternate": "driver"
+    },
+    {
+        "idx": "264",
+        "text": "The accountant asked the driver to stop at the corner and gave him some tips.",
+        "pronoun": "him",
+        "target": "driver",
+        "alternate": "accountant"
+    },
+    {
+        "idx": "265",
+        "text": "The manager discussed with the designer for a long time and tried to convince her to sell this idea.",
+        "pronoun": "her",
+        "target": "designer",
+        "alternate": "manager"
+    },
+    {
+        "idx": "266",
+        "text": "The designer discussed with the manager for a long time but still refused to sell the idea to him.",
+        "pronoun": "him",
+        "target": "manager",
+        "alternate": "designer"
+    },
+    {
+        "idx": "267",
+        "text": "The mechanic not only explained several terms to the counselor but also wrote some down for her.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "mechanic"
+    },
+    {
+        "idx": "268",
+        "text": "The counselor not only explained to the mechanic economy terms and also wrote down some down for him.",
+        "pronoun": "him",
+        "target": "mechanic",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "269",
+        "text": "The mechanic opened the door for the cleaner and led her to the room.",
+        "pronoun": "her",
+        "target": "cleaner",
+        "alternate": "mechanic"
+    },
+    {
+        "idx": "270",
+        "text": "The cleaner knocked at the mechanic 's door and waited for him to show up.",
+        "pronoun": "him",
+        "target": "mechanic",
+        "alternate": "cleaner"
+    },
+    {
+        "idx": "271",
+        "text": "The mover followed the writer 's instruction and waited outside her apartment.",
+        "pronoun": "her",
+        "target": "writer",
+        "alternate": "mover"
+    },
+    {
+        "idx": "272",
+        "text": "The writer asked the mover to move everything to the new apartment and paid him.",
+        "pronoun": "him",
+        "target": "mover",
+        "alternate": "writer"
+    },
+    {
+        "idx": "273",
+        "text": "The carpenter stopped the tailor from entering the workspace and talked to her.",
+        "pronoun": "her",
+        "target": "tailor",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "274",
+        "text": "The tailor showed the carpenter the tools and let him try.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "275",
+        "text": "The construction worker asked the assistant to make a list of today 's meetings and thanked her.",
+        "pronoun": "her",
+        "target": "assistant",
+        "alternate": "construction worker"
+    },
+    {
+        "idx": "276",
+        "text": "The assistant made a list of today 's schedule for the construction worker and showed him.",
+        "pronoun": "him",
+        "target": "construction worker",
+        "alternate": "assistant"
+    },
+    {
+        "idx": "277",
+        "text": "The supervisor asked the secretary to stop by and assigned a task to her.",
+        "pronoun": "her",
+        "target": "secretary",
+        "alternate": "supervisor"
+    },
+    {
+        "idx": "278",
+        "text": "The secretary greeted the supervisor and handed him the report.",
+        "pronoun": "him",
+        "target": "supervisor",
+        "alternate": "secretary"
+    },
+    {
+        "idx": "279",
+        "text": "The chief hired the receptionist and bought her a new phone for work.",
+        "pronoun": "her",
+        "target": "receptionist",
+        "alternate": "chief"
+    },
+    {
+        "idx": "280",
+        "text": "The receptionist was hired by the chief and will receive the payment from him.",
+        "pronoun": "him",
+        "target": "chief",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "281",
+        "text": "The janitor talked with the auditor and passed her the files.",
+        "pronoun": "her",
+        "target": "auditor",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "282",
+        "text": "The auditor called the janitor and asked him to clean up the hall.",
+        "pronoun": "him",
+        "target": "janitor",
+        "alternate": "auditor"
+    },
+    {
+        "idx": "283",
+        "text": "The analyst met the tailor at home and asked her to make a new suit.",
+        "pronoun": "her",
+        "target": "tailor",
+        "alternate": "analyst"
+    },
+    {
+        "idx": "284",
+        "text": "The tailor met the analyst at home and offered him a new design.",
+        "pronoun": "him",
+        "target": "analyst",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "285",
+        "text": "The sheriff stopped the nurse and hugged her for the great help.",
+        "pronoun": "her",
+        "target": "nurse",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "286",
+        "text": "The nurse met the sheriff at the scene and helped him with the accident.",
+        "pronoun": "him",
+        "target": "sheriff",
+        "alternate": "nurse"
+    },
+    {
+        "idx": "287",
+        "text": "The janitor met the receptionist and got the key from her every day.",
+        "pronoun": "her",
+        "target": "receptionist",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "288",
+        "text": "The receptionist waits for the janitor and drives him back every day.",
+        "pronoun": "him",
+        "target": "janitor",
+        "alternate": "receptionist"
+    },
+    {
+        "idx": "289",
+        "text": "The mover went to the tailor 's house and helped her move the boxes.",
+        "pronoun": "her",
+        "target": "tailor",
+        "alternate": "mover"
+    },
+    {
+        "idx": "290",
+        "text": "The tailor called the mover and asked him to arrive before 9 am.",
+        "pronoun": "him",
+        "target": "mover",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "291",
+        "text": "The developer dropped by the nurse and discussed with her about the surgery.",
+        "pronoun": "her",
+        "target": "nurse",
+        "alternate": "developer"
+    },
+    {
+        "idx": "292",
+        "text": "The nurse gave the developer the prescription and told him not to worry.",
+        "pronoun": "him",
+        "target": "developer",
+        "alternate": "nurse"
+    },
+    {
+        "idx": "293",
+        "text": "The mechanic helped the baker fix the machine and charged her 1000 dollars.",
+        "pronoun": "her",
+        "target": "baker",
+        "alternate": "mechanic"
+    },
+    {
+        "idx": "294",
+        "text": "The baker handed the mechanic the cake and waited for him to pay.",
+        "pronoun": "him",
+        "target": "mechanic",
+        "alternate": "baker"
+    },
+    {
+        "idx": "295",
+        "text": "The salesperson called the editor and asked her to write an article about the company.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "salesperson"
+    },
+    {
+        "idx": "296",
+        "text": "The editor interviewed the salesperson and wrote an article about his company.",
+        "pronoun": "his",
+        "target": "salesperson",
+        "alternate": "editor"
+    },
+    {
+        "idx": "297",
+        "text": "The mover arrived early at the counselor 's house and offered to help her.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "mover"
+    },
+    {
+        "idx": "298",
+        "text": "The counselor called the mover and asked him to start early.",
+        "pronoun": "him",
+        "target": "mover",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "299",
+        "text": "The supervisor stopped the cleaner and told her not to clean that room.",
+        "pronoun": "her",
+        "target": "cleaner",
+        "alternate": "supervisor"
+    },
+    {
+        "idx": "300",
+        "text": "The cleaner stopped the supervisor and told him not to walk on that way.",
+        "pronoun": "him",
+        "target": "supervisor",
+        "alternate": "cleaner"
+    },
+    {
+        "idx": "301",
+        "text": "The lawyer called the tailor and made an appointment with her.",
+        "pronoun": "her",
+        "target": "tailor",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "302",
+        "text": "The tailor called the lawyer and made an appointment with him.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "303",
+        "text": "The cook decided to fire the secretary and told her not to come here next Monday.",
+        "pronoun": "her",
+        "target": "secretary",
+        "alternate": "cook"
+    },
+    {
+        "idx": "304",
+        "text": "The secretary had a quarrel with the cook and threw a book to him.",
+        "pronoun": "him",
+        "target": "cook",
+        "alternate": "secretary"
+    },
+    {
+        "idx": "305",
+        "text": "The farmer consulted the secretary about many things and invited her to dinner.",
+        "pronoun": "her",
+        "target": "secretary",
+        "alternate": "farmer"
+    },
+    {
+        "idx": "306",
+        "text": "The secretary bought many products from the farmer and asked him for a discount.",
+        "pronoun": "him",
+        "target": "farmer",
+        "alternate": "secretary"
+    },
+    {
+        "idx": "307",
+        "text": "The farmer hired the assistant and told her to come to work twice a week.",
+        "pronoun": "her",
+        "target": "assistant",
+        "alternate": "farmer"
+    },
+    {
+        "idx": "308",
+        "text": "The assistant rescheduled the meeting for the farmer and told him to be well prepared.",
+        "pronoun": "him",
+        "target": "farmer",
+        "alternate": "assistant"
+    },
+    {
+        "idx": "309",
+        "text": "The supervisor had a quarrel with the attendant and decided to fire her.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "supervisor"
+    },
+    {
+        "idx": "310",
+        "text": "The attendant hit the supervisor by mistake and apologized to him.",
+        "pronoun": "him",
+        "target": "supervisor",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "311",
+        "text": "The manager asked the librarian a lot of questions and thanked her in the end.",
+        "pronoun": "her",
+        "target": "librarian",
+        "alternate": "manager"
+    },
+    {
+        "idx": "312",
+        "text": "The librarian guided the manager to the bookshelf and asked what he needed.",
+        "pronoun": "he",
+        "target": "manager",
+        "alternate": "librarian"
+    },
+    {
+        "idx": "313",
+        "text": "The mover discussed with the nurse about the surgery and thanked her.",
+        "pronoun": "her",
+        "target": "nurse",
+        "alternate": "mover"
+    },
+    {
+        "idx": "314",
+        "text": "The nurse helped to send the mover to the hospital and kept comforting him.",
+        "pronoun": "him",
+        "target": "mover",
+        "alternate": "nurse"
+    },
+    {
+        "idx": "315",
+        "text": "The farmer drove the attendant to the railway station and gave her a gift.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "farmer"
+    },
+    {
+        "idx": "316",
+        "text": "The attendant bought some fruit from the farmer and paid him by check.",
+        "pronoun": "him",
+        "target": "farmer",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "317",
+        "text": "The developer consulted with the counselor for hours and paid her a lot of money.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "developer"
+    },
+    {
+        "idx": "318",
+        "text": "The counselor taught the developer how to write the patent and charged him 2,000 dollars.",
+        "pronoun": "him",
+        "target": "developer",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "319",
+        "text": "The physician examined the accountant in detail and told her nothing to worry about.",
+        "pronoun": "her",
+        "target": "accountant",
+        "alternate": "physician"
+    },
+    {
+        "idx": "320",
+        "text": "The accountant showed the bill to the physician and told him to pay that on time.",
+        "pronoun": "him",
+        "target": "physician",
+        "alternate": "accountant"
+    },
+    {
+        "idx": "321",
+        "text": "The laborer saw the tailor at the corner and talked to her for 2 hours.",
+        "pronoun": "her",
+        "target": "tailor",
+        "alternate": "laborer"
+    },
+    {
+        "idx": "322",
+        "text": "The tailor offered the laborer a new suit and charged him nothing.",
+        "pronoun": "him",
+        "target": "laborer",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "323",
+        "text": "The physician hired a housekeeper and told her to work every day.",
+        "pronoun": "her",
+        "target": "a housekeeper",
+        "alternate": "physician"
+    },
+    {
+        "idx": "324",
+        "text": "The housekeeper woke the physician up and told him someone was calling for him.",
+        "pronoun": "him",
+        "target": "physician",
+        "alternate": "a housekeeper"
+    },
+    {
+        "idx": "325",
+        "text": "The sheriff chatted with the tailor and invited her to dinner later.",
+        "pronoun": "her",
+        "target": "tailor",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "326",
+        "text": "The tailor finished the suit for the sheriff and called him.",
+        "pronoun": "him",
+        "target": "sheriff",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "327",
+        "text": "The driver crashed into the designer 's artifact and paid her a lot.",
+        "pronoun": "her",
+        "target": "designer",
+        "alternate": "driver"
+    },
+    {
+        "idx": "328",
+        "text": "The designer stopped the driver and asked him to be careful in the Expo Location.",
+        "pronoun": "him",
+        "target": "driver",
+        "alternate": "designer"
+    },
+    {
+        "idx": "329",
+        "text": "The sheriff returned the expired cake to the baker and asked her to return the money.",
+        "pronoun": "her",
+        "target": "baker",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "330",
+        "text": "The baker packed the cake for the sheriff and waited for him to pay.",
+        "pronoun": "him",
+        "target": "sheriff",
+        "alternate": "baker"
+    },
+    {
+        "idx": "331",
+        "text": "The janitor asked the clerk how to find the meeting room and thanked her.",
+        "pronoun": "her",
+        "target": "clerk",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "332",
+        "text": "The clerk told the janitor to clean up the meeting room and thanked him.",
+        "pronoun": "him",
+        "target": "janitor",
+        "alternate": "clerk"
+    },
+    {
+        "idx": "333",
+        "text": "The developer did not find the attendant in the room and left her a note.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "developer"
+    },
+    {
+        "idx": "334",
+        "text": "The attendant told the developer there was a meeting and provided him the location.",
+        "pronoun": "him",
+        "target": "developer",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "335",
+        "text": "The carpenter went to the writer 's house and fixed the window for her.",
+        "pronoun": "her",
+        "target": "writer",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "336",
+        "text": "The writer met the carpenter in the shopping mall and made an appointment with him.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "writer"
+    },
+    {
+        "idx": "337",
+        "text": "The cook needed the attendant to be a taste tester and asked her.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "cook"
+    },
+    {
+        "idx": "338",
+        "text": "The attendant loomed over the cake the cook prepared and gave him feedback.",
+        "pronoun": "him",
+        "target": "cook",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "339",
+        "text": "The analyst needed to get the housekeeper into the house and paid her to do so.",
+        "pronoun": "her",
+        "target": "housekeeper",
+        "alternate": "analyst"
+    },
+    {
+        "idx": "340",
+        "text": "The housekeeper was paid by the analyst and did his housework.",
+        "pronoun": "his",
+        "target": "analyst",
+        "alternate": "housekeeper"
+    },
+    {
+        "idx": "341",
+        "text": "The guard wanted to spite the attendant and sabotaged her.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "guard"
+    },
+    {
+        "idx": "342",
+        "text": "The attendant did not want to fight with the guard and gave him flowers.",
+        "pronoun": "him",
+        "target": "guard",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "343",
+        "text": "The physician noticed the librarian 's eye twitched and treated her.",
+        "pronoun": "her",
+        "target": "librarian",
+        "alternate": "physician"
+    },
+    {
+        "idx": "344",
+        "text": "The librarian wrote the physician a nice note and repaid him with a book.",
+        "pronoun": "him",
+        "target": "physician",
+        "alternate": "librarian"
+    },
+    {
+        "idx": "345",
+        "text": "The driver begged the writer to help and offered to pay her.",
+        "pronoun": "her",
+        "target": "writer",
+        "alternate": "driver"
+    },
+    {
+        "idx": "346",
+        "text": "The writer wrote the driver a note and even offered him relationship advice.",
+        "pronoun": "him",
+        "target": "driver",
+        "alternate": "writer"
+    },
+    {
+        "idx": "347",
+        "text": "The mover refused to move the artwork where the designer asked and demanded she reconsider.",
+        "pronoun": "she",
+        "target": "designer",
+        "alternate": "mover"
+    },
+    {
+        "idx": "348",
+        "text": "The designer tried to explain to the mover that nothing was wrong and even drew him a diagram.",
+        "pronoun": "him",
+        "target": "mover",
+        "alternate": "designer"
+    },
+    {
+        "idx": "349",
+        "text": "The driver perceived the baker 's frailty and helped her with deliveries.",
+        "pronoun": "her",
+        "target": "baker",
+        "alternate": "driver"
+    },
+    {
+        "idx": "350",
+        "text": "The baker never wanted the driver 's help and beat him with a baguette.",
+        "pronoun": "him",
+        "target": "driver",
+        "alternate": "baker"
+    },
+    {
+        "idx": "351",
+        "text": "The carpenter did not know what do when the auditor arrived and simply gave her all the paperwork.",
+        "pronoun": "her",
+        "target": "auditor",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "352",
+        "text": "The auditor was baffled at the carpenter 's lack of organization and warned him that the audit would not end well.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "auditor"
+    },
+    {
+        "idx": "353",
+        "text": "The developer wanted free bread from the baker and made up a story for her about not having a kitchen.",
+        "pronoun": "her",
+        "target": "baker",
+        "alternate": "developer"
+    },
+    {
+        "idx": "354",
+        "text": "The baker knew the developer was lying about the kitchen but made him bread anyways.",
+        "pronoun": "him",
+        "target": "developer",
+        "alternate": "baker"
+    },
+    {
+        "idx": "355",
+        "text": "The chief was worried for the auditor 's safety and asked her to stop snooping.",
+        "pronoun": "her",
+        "target": "auditor",
+        "alternate": "chief"
+    },
+    {
+        "idx": "356",
+        "text": "The auditor ignored the chief 's warning and put him out of mind.",
+        "pronoun": "him",
+        "target": "chief",
+        "alternate": "auditor"
+    },
+    {
+        "idx": "357",
+        "text": "The CEO was worried that the teacher liked to ignore students and called her.",
+        "pronoun": "her",
+        "target": "teacher",
+        "alternate": "ceo"
+    },
+    {
+        "idx": "358",
+        "text": "The teacher could not stand the CEO and purposefully failed his son.",
+        "pronoun": "his",
+        "target": "ceo",
+        "alternate": "teacher"
+    },
+    {
+        "idx": "359",
+        "text": "The physician was concerned for the hairdresser and examined her for cuts.",
+        "pronoun": "her",
+        "target": "hairdresser",
+        "alternate": "physician"
+    },
+    {
+        "idx": "360",
+        "text": "The hairdresser was clumsy around the physician and nearly cut him.",
+        "pronoun": "him",
+        "target": "physician",
+        "alternate": "hairdresser"
+    },
+    {
+        "idx": "361",
+        "text": "The janitor hated working for the tailor but did what she said.",
+        "pronoun": "she",
+        "target": "tailor",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "362",
+        "text": "The tailor thought the janitor could be good a sewing and encouraged him.",
+        "pronoun": "him",
+        "target": "janitor",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "363",
+        "text": "The chief never wanted to help the attendant and refused her request.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "chief"
+    },
+    {
+        "idx": "364",
+        "text": "The attendant could not understand the chief 's problem and reported him to the union.",
+        "pronoun": "him",
+        "target": "chief",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "365",
+        "text": "The laborer envied the attendant 's job and told her so.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "laborer"
+    },
+    {
+        "idx": "366",
+        "text": "The attendant ignored the laborer and told him to get back to work.",
+        "pronoun": "him",
+        "target": "laborer",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "367",
+        "text": "The editor ordered a table from the carpenter and asked him to deliver tomorrow.",
+        "pronoun": "him",
+        "target": "carpenter",
+        "alternate": "editor"
+    },
+    {
+        "idx": "368",
+        "text": "The carpenter received the editor 's order and made her a table.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "carpenter"
+    },
+    {
+        "idx": "369",
+        "text": "The sheriff tried to control the editor 's newspaper and asked her to stop publishing.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "370",
+        "text": "The editor tricked the sheriff into believing everything was fine and published the story about him anyways.",
+        "pronoun": "him",
+        "target": "sheriff",
+        "alternate": "editor"
+    },
+    {
+        "idx": "371",
+        "text": "The chief was always hounding the editor and told her to redo the work.",
+        "pronoun": "her",
+        "target": "editor",
+        "alternate": "chief"
+    },
+    {
+        "idx": "372",
+        "text": "The editor never respected the chief and gave him bad work.",
+        "pronoun": "him",
+        "target": "chief",
+        "alternate": "editor"
+    },
+    {
+        "idx": "373",
+        "text": "The cook tried to trick the auditor and showed her a different kitchen.",
+        "pronoun": "her",
+        "target": "auditor",
+        "alternate": "cook"
+    },
+    {
+        "idx": "374",
+        "text": "The auditor knew the cook was dishonest and went to his kitchen after hours.",
+        "pronoun": "his",
+        "target": "cook",
+        "alternate": "auditor"
+    },
+    {
+        "idx": "375",
+        "text": "The designer wanted to impress the salesperson but showed him a bad design.",
+        "pronoun": "him",
+        "target": "salesperson",
+        "alternate": "designer"
+    },
+    {
+        "idx": "376",
+        "text": "The salesperson tried to convince the designer that something was wrong but instead made her mad.",
+        "pronoun": "her",
+        "target": "designer",
+        "alternate": "salesperson"
+    },
+    {
+        "idx": "377",
+        "text": "The sheriff saw a video of the counselor and went to interview her.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "sheriff"
+    },
+    {
+        "idx": "378",
+        "text": "The counselor anticipated the sheriff 's investigation and filed a complaint against him for mishandling evidence.",
+        "pronoun": "him",
+        "target": "sheriff",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "379",
+        "text": "Being exhausted from work, the analyst called the counselor and ranted to her.",
+        "pronoun": "her",
+        "target": "counselor",
+        "alternate": "analyst"
+    },
+    {
+        "idx": "380",
+        "text": "The counselor called the analyst and asked him about the next appointment.",
+        "pronoun": "him",
+        "target": "analyst",
+        "alternate": "counselor"
+    },
+    {
+        "idx": "381",
+        "text": "The physician treated the tailor and suggested she change her lifestyle.",
+        "pronoun": "she",
+        "target": "tailor",
+        "alternate": "physician"
+    },
+    {
+        "idx": "382",
+        "text": "The tailor waited for the physician and handed him a suit.",
+        "pronoun": "him",
+        "target": "physician",
+        "alternate": "tailor"
+    },
+    {
+        "idx": "383",
+        "text": "The lawyer liked talking to the attendant and asked her to come back tomorrow.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "lawyer"
+    },
+    {
+        "idx": "384",
+        "text": "The attendant was looking for the lawyer to ask him about the missing wallet.",
+        "pronoun": "him",
+        "target": "lawyer",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "385",
+        "text": "The janitor bullied the attendant and took her food.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "janitor"
+    },
+    {
+        "idx": "386",
+        "text": "The attendant was patient with the janitor and listened to his story.",
+        "pronoun": "his",
+        "target": "janitor",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "387",
+        "text": "The mover saw the attendant unoccupied and asked her for help.",
+        "pronoun": "her",
+        "target": "attendant",
+        "alternate": "mover"
+    },
+    {
+        "idx": "388",
+        "text": "The attendant thought the mover needed help and offered him a hand.",
+        "pronoun": "him",
+        "target": "mover",
+        "alternate": "attendant"
+    },
+    {
+        "idx": "389",
+        "text": "The farmer visited the librarian and asked her about the library hours.",
+        "pronoun": "her",
+        "target": "librarian",
+        "alternate": "farmer"
+    },
+    {
+        "idx": "390",
+        "text": "The librarian delivered books to the farmer and encouraged him to read more.",
+        "pronoun": "him",
+        "target": "farmer",
+        "alternate": "librarian"
+    },
+    {
+        "idx": "391",
+        "text": "The assistant paid the driver and asked him to pay more attention.",
+        "pronoun": "him",
+        "target": "driver",
+        "alternate": "assistant"
+    },
+    {
+        "idx": "392",
+        "text": "The driver was annoyed with the assistant and asked her to never come back.",
+        "pronoun": "her",
+        "target": "assistant",
+        "alternate": "driver"
+    },
+    {
+        "idx": "393",
+        "text": "The cleaner waited for the chief and talked to him about the missed payment.",
+        "pronoun": "him",
+        "target": "chief",
+        "alternate": "cleaner"
+    },
+    {
+        "idx": "394",
+        "text": "The chief waited for the cleaner and asked her for a better service.",
+        "pronoun": "her",
+        "target": "cleaner",
+        "alternate": "chief"
+    },
+    {
+        "idx": "395",
+        "text": "The teacher befriended the janitor and told him about school gossip.",
+        "pronoun": "him",
+        "target": "janitor",
+        "alternate": "teacher"
+    },
+    {
+        "idx": "396",
+        "text": "The janitor befriended the teacher and told her about staff gossip.",
+        "pronoun": "her",
+        "target": "teacher",
+        "alternate": "janitor"
+    }
+]
